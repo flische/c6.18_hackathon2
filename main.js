@@ -270,9 +270,10 @@ function handleDetailsClick(){
 //passing in the index into this function
 function handlePage3Details(singleEvent) {
     //changing the span text to match the details for the event being generated
-    $('.pageThreeArtistImg').attr('src', singleEvent.events[0].images[0]);
+    var artistPicture = singleEvent.images[3].url;
+    $('.pageThreeArtistImg').attr('src', artistPicture);
     $('.pageThreeNameSpan').text(singleEvent.name);
-    $('.pageThreeVenueAddressSpan').text(singleEvent._embedded.venues.address.line1);
+    $('.pageThreeVenueAddressSpan').text(singleEvent._embedded.venues[0].address.line1 + ', ' + singleEvent._embedded.venues[0].city.name);
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
