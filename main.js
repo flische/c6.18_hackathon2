@@ -38,7 +38,6 @@ venueSearchResults = [];
 */
 function page2DomCreation(venueSearchResults){
     $('#dummyBodyTag').empty() // maybe used to clear page before rendering new elements???? idk
-
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
     function createEventElement(eventDetails){
@@ -50,9 +49,17 @@ function page2DomCreation(venueSearchResults){
         let eachEventTime = $('<div>').text(eventDetails.time);
         eachEventDetailBody.append(eachArtistName, eachVenueName,eachVenueCity,eachEventDate,eachEventTime);
     }
-    for (var resultIndex = 0; resultIndex < venueSearchResults.length; index++){
-        //loops through and creates each individual element and appends to the DOM
-        $('#dummyBodyTag').append(createEventElement(venueSearchResults[i]));
+    //loops through and creates each individual element and appends to the DOM
+    for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++){
+        let singleDomElement = createEventElement(venueSearchResults[resultIndex]);
+        //rebecca wanted to add 2 different classes to style every other line differnetly
+        if(resultIndex % 2 === 0){
+            singleDomElement.addClass('dark');
+            $('#dummyBodyTag').append(singleDomElement);
+        } else {
+            singleDomElement.addClass('light');
+            $('#dummyBodyTag').append(singleDomElement);
+        }
     }
 }
 
