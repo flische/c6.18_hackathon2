@@ -255,14 +255,24 @@ function createMarker(place) {
 *showHidePage function hide page 4 show page 5
 *button on page to run startOver function
 */
-function viewYelpInfo() {
-    var ajaxConfig = {
-        "url": "https://yelp.ongandy.com/businesses",
+function getYelpInfo(name, address1, city) {
+     var customURL = "https://yelp.ongandy.com/businesses/matches";
+     if(name) {
+         customURL+= "?name=" + name;
+     }
+     if(address1) {
+         customURL+= "&address1=" + address1;
+     }
+     if(city) {
+         customURL+= "&city=" + city + "&state=CA&country=US";
+     }
+     console.log('here is our custom URL', customURL);
+
+     var ajaxConfig = {
+        "url": customURL,
         "method": "POST",
         "dataType": "JSON",
         "data": {
-            term: "bars",
-            location: "anaheim",
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
         },
         success: function(response) {
@@ -276,6 +286,28 @@ function viewYelpInfo() {
         console.log(response);
     });
 }
+
+getYelpInfo('The Oyster Bar SKC', '2626 E Katella Ave', 'Anaheim');
+
+ function getVenueData(city, genre){
+     var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
+     if (city){
+         custUrl+= '&city='+ city;
+     }
+     if (genre){
+         custUrl+= '&keyword=' + genre;
+     }
+     var ajaxConfig = {
+         url: custUrl,
+         success: function(result) {
+             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
+                 venueSearchResults[venueI] = result._embedded.events[venueI];
+             }
+         },
+         error: console.log('error')
+     };
+     $.ajax(ajaxConfig);
+ }
 
 /*************************************************************************************************
 * startOver function
