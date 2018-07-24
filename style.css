@@ -1,3 +1,5 @@
+/* ******************GLOBAL STYLING**************************** */
+
 body {
     height: 100vh;
     width: 100vw;
@@ -43,6 +45,12 @@ header {
     font-size: 10vmin;
 }
 
+/* ******************LANDING PAGE STYLING************************ */
+
+.banner {
+    display: none;
+}
+
 .banner>img {
     width: 100%;
     border: 2px solid white;
@@ -50,6 +58,7 @@ header {
 
 .inputs {
     text-align: center;
+    display: none;
 }
 
 input {
@@ -59,11 +68,118 @@ input {
     width: 300px;
 }
 
-button {
+#searchGenre {
     width: 30vmin;
-    height: 8vmin;
+    height: 7vmin;
+    margin-top: 20px;
     border-radius: 3px;
     background-color: white;
     font-family: 'Monoton', cursive;
     font-size: 3vmin;
+}
+
+#map {
+    display: none;
+    height: 500px;
+    width: 500px;
+}
+
+.city,
+.genre {
+    font-size: 2vmin;
+    color: white;
+}
+
+#city,
+#genre {
+    display: block;
+}
+
+#genre {
+    font-size: 2vmin;
+    width: 200px;
+    padding: 14px;
+    border-radius: 3px;
+}
+
+/* *****************EVENT RESULTS STYLING*************************** */
+
+.event-results {
+    width: 100%;
+    height: 100%;
+    padding-top: 2%;
+}
+
+.event-header {
+    border: 2px solid white;
+    box-sizing: border-box;
+    font-size: 6vmin;
+    text-align: center;
+    color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.event-header>p {
+    font-size: 3vmin;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.events-body {
+    font-size: 2.5vmin;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.dark {
+    background-color: coral
+}
+
+.light {
+    background-color: white;
+}
+
+.left-event,
+.center-event,
+.right-event {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 10px;
+}
+
+.right-event {
+    text-align: right;
+}
+
+.center-event {
+    display: inline-block;
+    padding-left: 10px;
+    width: 40%;
+}
+
+.left-event {
+    width: 40%;
+    padding-left: 2%;
+}
+
+#details {
+    width: 12vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
+
+.btn-div {
+    text-align: right;
+}
+
+#reset {
+    width: 20vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
 }

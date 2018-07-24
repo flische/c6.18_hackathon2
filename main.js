@@ -3,6 +3,17 @@
  */
 $(document).ready(initializeApp);
 
+/*
+area for globals
+venueSearchResults = [];
+*/
+var map;
+var service;
+var latitude = 33.69
+var longitude = -117.83
+/*initialize app function
+*call addClickHandlers function
+*no params or returns
 
 /**
  * Define all global variables here (below).
@@ -10,6 +21,7 @@ $(document).ready(initializeApp);
 /*****************************
 * venueSearchResults = []; - global array to hold search results
 * @type {Array}
+
 */
 var venueSearchResults = [];
 
@@ -117,8 +129,6 @@ function page2DomCreation(venueSearchResults){
     }
 }
 
-
-
 /*************************************************************************************************
 * showHidePage function
 * @params which page to show, which page to hide
@@ -165,8 +175,93 @@ function searchForRestaurantsNearby(){
 function viewYelpInfo(){
 }
 
+/* initializeMap
+*params lat and long
+*takes in parameters from search for restaurants / bars / hotels to change type in var request to match what type of place person is searching for
+*/
+
+function initializeMap() {
+    //defines location we are targeting on the map
+    var location = new google.maps.LatLng(latitude, longitude);
+    //creates instance of map
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: location,
+        zoom: 15
+    });
+    //request contains the radius around given location and the type of facility we are targeting
+    var request = {
+        location: location,
+        radius: '500',
+        type: ['restaurant']
+    };
+
+    service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, callback);
+}
+
+function callback(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+            var place = results[i];
+            createMarker(results[i]);
+        }
+    }
+}
+
+function createMarker(place) {
+    var placeLoc = place.geometry.location;
+    if (place.icon) {
+        var image = new google.maps.MarkerImage(
+            place.icon, new google.maps.Size(71, 71),
+            new google.maps.Point(0, 0), new google.maps.Point(17, 34),
+            new google.maps.Size(25, 25));
+    } else var image = null;
+
+    var marker = new google.maps.Marker({
+        map: map,
+        icon: image,
+        position: place.geometry.location
+    });
+    var request = {
+        reference: place.reference
+    };
+
+    var infowindow = new google.maps.InfoWindow({
+        contentStr: ""
+    });
+
+    google.maps.event.addListener(marker, 'click', function () {
+        service.getDetails(request, function (place, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                var contentStr = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
+                if (!!place.formatted_phone_number) contentStr += '<br>' + place.formatted_phone_number;
+                if (!!place.website) contentStr += '<br><a target="_blank" href="' + place.website +
+                    '">' + place.website + '</a>';
+                contentStr += '<br>' + '</p>';
+                infowindow.setContent(contentStr);
+                infowindow.open(map, marker);
+            } else {
+                var contentStr = "<h5>No Result, status=" + status + "</h5>";
+                infowindow.setContent(contentStr);
+                infowindow.open(map, marker);
+            }
+        });
+    });
+}
+
+
+/*viewYelpInfo function
+*params businessSelected
+*run yelp api, store results and populate data onto page5 template
+*showHidePage function hide page 4 show page 5
+*button on page to run startover function
+/*
+
+/* startover function
+
 /*************************************************************************************************
 * startOver function
+
 * basically reset button, go back to page one and empty array
 */
 function startOver(){

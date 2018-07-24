@@ -8,6 +8,11 @@
     <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA="
+        crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYmVQhuCZm_6rTtCi9Wxr-17jfFFkT6Kc&libraries=places&callback=initializeMap"
+        async defer></script>
     <script src="main.js"></script>
 </head>
 
@@ -21,17 +26,124 @@
             </div>
             <div class="inputs">
                 <div class="city">
-                    <input type="text" placeholder="Enter A City or Zip Code">
+                    Enter A City or Zip Code
+                    <input id="city" type="text" placeholder="Enter A City or Zip Code">
                 </div>
                 <div class="genre">
-                    <input type="text" placeholder="Enter A Genre of Music">
+                    Selct A Music Genre
+                    <select id="genre">
+                        <option value="rock">Rock</option>
+                        <option value="pop">Pop</option>
+                        <option value="country">Country</option>
+                        <option value="rap">Rap</option>
+                    </select>
                 </div>
-                <button>FIND CONCERTS</button>
+                <button type="button" id="searchGenre">FIND CONCERTS</button>
             </div>
+            <div class="event-results">
+                <div class="event-header">EVENTS
+                    <p>search results</p>
+                </div>
+                <div class="events-body">
+                    <div class="light">
+                        <div class="left-event">
+                            <div class="artist">ARTIST:
+                                <span>Taylor Swift</span>
+                            </div>
+                            <div class="venue">VENUE:
+                                <span>Honda Center</span>
+                            </div>
+                            <div class="results-city">CITY: Irvine</div>
+                        </div>
+                        <div class="center-event">
+                            <div class="date">DATE:
+                                <span>May 10, 2019</span>
+                            </div>
+                            <div class="time">TIME:
+                                <span> 7:00PM</span>
+                            </div>
+                        </div>
+                        <div class="right-event">
+                            <button type="button" id="details">DETAILS</button>
+                        </div>
 
+
+                    </div>
+                    <div class="dark">
+                        <div class="left-event">
+                            <div class="artist">ARTIST:
+                                <span>Taylor Swift</span>
+                            </div>
+                            <div class="venue">VENUE:
+                                <span>Honda Center</span>
+                            </div>
+                            <div class="results-city">CITY: Irvine</div>
+                        </div>
+                        <div class="center-event">
+                            <div class="date">DATE:
+                                <span>May 10, 2019</span>
+                            </div>
+                            <div class="time">TIME:
+                                <span> 7:00PM</span>
+                            </div>
+                        </div>
+                        <div class="right-event">
+                            <button type="button" id="details">DETAILS</button>
+                        </div>
+                    </div>
+                    <div class="light">
+                        <div class="left-event">
+                            <div class="artist">ARTIST:
+                                <span>Taylor Swift</span>
+                            </div>
+                            <div class="venue">VENUE:
+                                <span>Honda Center</span>
+                            </div>
+                            <div class="results-city">CITY: Irvine</div>
+                        </div>
+                        <div class="center-event">
+                            <div class="date">DATE:
+                                <span>May 10, 2019</span>
+                            </div>
+                            <div class="time">TIME:
+                                <span> 7:00PM</span>
+                            </div>
+                        </div>
+                        <div class="right-event">
+                            <button type="button" id="details">DETAILS</button>
+                        </div>
+                    </div>
+                    <div class="dark">
+                        <div class="left-event">
+                            <div class="artist">ARTIST:
+                                <span>Taylor Swift</span>
+                            </div>
+                            <div class="venue">VENUE:
+                                <span>Honda Center</span>
+                            </div>
+                            <div class="results-city">CITY: Irvine</div>
+                        </div>
+                        <div class="center-event">
+                            <div class="date">DATE:
+                                <span>May 10, 2019</span>
+                            </div>
+                            <div class="time">TIME:
+                                <span> 7:00PM</span>
+                            </div>
+                        </div>
+                        <div class="right-event">
+                            <button type="button" id="details">DETAILS</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-div">
+                    <button id="reset">RESET SEARCH</button>
+                </div>
+            </div>
         </div>
         <div class="right"></div>
     </div>
+    <div id="map"></div>
 </body>
 
 </html>
