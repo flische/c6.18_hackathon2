@@ -44,7 +44,8 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $('.details').click(pageTransition2);
+    $('.details').on('click',  pageTransition2);
+    $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
 }
 /*************************************************************************************************
@@ -151,7 +152,7 @@ function page2DomCreation(venueSearchResults) {
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
-        var buttonObject = $('<button>', { 'type': 'button', 'id': 'details', 'arrayindex': index, text: 'DETAILS' });
+        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': index, text: 'DETAILS' });
 
         rightEventDiv.append(buttonObject);
         leftEventDiv.append(eachArtistName, eachVenueName);
@@ -188,7 +189,7 @@ function page2DomCreation(venueSearchResults) {
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
-        var buttonObject = $('<button>', { 'type': 'button', 'id': 'details', 'arrayindex': index, text: 'DETAILS' });
+        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': index, text: 'DETAILS' });
 
         rightEventDiv.append(buttonObject);
         leftEventDiv.append(eachArtistName, eachVenueName);
@@ -246,7 +247,11 @@ function pageTransition3() {
 
 }
 
-
+function handleDetailsClick(){
+	var detailsIndex = $(this).attr('arrayindex');
+	handlePage3Details(venueSearchResults[detailsIndex]);
+	pageTransition2();
+}
 
 
 function handlePage3Details() {
