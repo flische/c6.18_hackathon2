@@ -249,8 +249,14 @@ function pageTransition3() {
 
 
 //passing in the index into this function
-function handlePage3Details() {
-    //
+function handlePage3Details(singleEvent) {
+    //changing the span text to match the details for the event being generated
+    $('.pageThreeArtistImg')..attr('src', singleEvent.events[0].images[0]);
+    $('.pageThreeNameSpan').text(singleEvent.name);
+    $('.pageThreeVenueAddressSpan').text(singleEvent._embedded.venues.address.line1);
+    $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
+    $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
+    $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
 }
 /*************************************************************************************************
 * searchForBarsNearby
@@ -260,6 +266,7 @@ function handlePage3Details() {
 * create links on the dropped markers near venue to viewYelpInfo with param of business selected
 */
 function searchForBarsNearby() {
+
 }
 
 /*************************************************************************************************
