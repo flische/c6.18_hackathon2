@@ -19,26 +19,28 @@
     <div class="main">
         <div class="left"></div>
         <div class="center">
-            <div class="banner">
-                <img src="images/concert2.jpg" alt="">
-            </div>
-            <div class="inputs">
-                <div class="city">
-                    Enter A City or Zip Code
-                    <input id="city" type="text" placeholder="Enter A City or Zip Code">
+            <div class="home">
+                <div class="banner">
+                    <img src="images/concert2.jpg" alt="">
                 </div>
-                <div class="genre">
-                    Selct A Music Genre
-                    <select id="genre">
-                        <option value="rock">Rock</option>
-                        <option value="pop">Pop</option>
-                        <option value="country">Country</option>
-                        <option value="rap">Rap</option>
-                    </select>
+                <div class="inputs">
+                    <div class="city">
+                        Enter A City
+                        <input id="city" type="text" placeholder="Enter A City">
+                    </div>
+                    <div class="genre">
+                        Selct A Music Genre
+                        <select id="genre">
+                            <option value="rock">Rock</option>
+                            <option value="pop">Pop</option>
+                            <option value="country">Country</option>
+                            <option value="rap">Rap</option>
+                        </select>
+                    </div>
+                    <button type="button" id="searchGenre">FIND CONCERTS</button>
                 </div>
-                <button type="button" id="searchGenre">FIND CONCERTS</button>
             </div>
-            <div class="event-results">
+            <div class="event-results hidden">
                 <div class="event-header">EVENTS
                     <p>search results</p>
                 </div>
@@ -135,13 +137,80 @@
                     </div>
                 </div>
                 <div class="btn-div">
-                    <button id="reset">RESET SEARCH</button>
+                    <button class="reset">RESET SEARCH</button>
+                </div>
+            </div>
+
+            <div class="concert-details hidden">
+                <div class="concert-header">
+
+                    Concert Details
+                </div>
+                <div class="concert-details-body">
+                    <div class="image-body">
+                        <img src="images/swift.jpg" alt="">
+                    </div>
+                    <div class="venue-info">
+                        <div class="artist-name"> ARTIST NAME:
+                            <span>Taylor Swift
+                            </span>
+                        </div>
+                        <div class="venue">VENUE:
+                            <span>Honda Center
+                            </span>
+                        </div>
+                        <div class="venue-address">VENUE ADDRESS:
+                            <span>2695 E Katella Ave, Anaheim, CA 92806
+                            </span>
+                        </div>
+
+
+                    </div>
+                    <div class="date-time">
+                        <div class="date">DATE:
+                            <span>
+                                May 20, 2019</span>
+                        </div>
+                        <div class="time">TIME:
+                            <span>07:00 PM</span>
+                        </div>
+                        <button id="tickets" type="button">BUY TICKETS</button>
+                    </div>
+
+                    <div class="search-nearby">
+                        Search Nearby
+                    </div>
+                    <div class="search-btns">
+                        <button id="restaurant" value="restaurant">Restaurants</button>
+                        <button id="bar" value="bars">Bars</button>
+                        <button id=lodging value="lodging">Hotels</button>
+                    </div>
+                    <div class="back-btns">
+                        <div class="left-btn">
+                            <button class="results">BACK TO SEARCH RESULTS</button>
+                        </div>
+                        <div class="right-btn"></div>
+                        <button class="reset">RESET SEARCH</button>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="google-maps hidden">
+                <div id="map">GOOGLE MAPS</div>
+                <div class="back-btns">
+                    <div class="left-btn">
+                        <button class="back-to-details">BACK TO CONCERT DETAILS</button>
+                    </div>
+                    <div class="right-btn"></div>
+                    <button class="reset">RESET SEARCH</button>
                 </div>
             </div>
         </div>
-        <div class="right"></div>
     </div>
-    <div id="map"></div>
+    <div class="right"></div>
+    </div>
+
 </body>
 
 </html>

@@ -6,6 +6,7 @@ body {
     margin: 0 auto;
     background-color: #4c4d52;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 0;
 }
 
 header {
@@ -16,13 +17,16 @@ header {
     font-size: 9vmin;
     font-weight: bold;
     letter-spacing: 4px;
-    padding-top: 1%;
-    height: 15%;
+    height: 12%;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .main {
     font-size: 0;
+    height: 85%;
+    width: 100%;
 }
 
 .left,
@@ -45,10 +49,15 @@ header {
     font-size: 10vmin;
 }
 
+.hidden {
+    display: none;
+}
+
 /* ******************LANDING PAGE STYLING************************ */
 
-.banner {
-    display: none;
+.home {
+    width: 100%;
+    height: 100%;
 }
 
 .banner>img {
@@ -58,7 +67,6 @@ header {
 
 .inputs {
     text-align: center;
-    display: none;
 }
 
 input {
@@ -76,12 +84,6 @@ input {
     background-color: white;
     font-family: 'Monoton', cursive;
     font-size: 3vmin;
-}
-
-#map {
-    display: none;
-    height: 500px;
-    width: 500px;
 }
 
 .city,
@@ -117,7 +119,7 @@ input {
     text-align: center;
     color: white;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .event-header>p {
@@ -130,7 +132,7 @@ input {
     font-size: 2.5vmin;
     background-color: white;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .dark {
@@ -164,7 +166,7 @@ input {
     padding-left: 2%;
 }
 
-#details {
+.details {
     width: 12vmin;
     height: 7vmin;
     border-radius: 3px;
@@ -176,8 +178,157 @@ input {
     text-align: right;
 }
 
-#reset {
+.reset {
     width: 20vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
+
+/* *************************CONCERT DETAILS******************************* */
+
+.concert-details {
+    width: 100%;
+    height: 100%;
+    padding-top: 2%;
+}
+
+.concert-header {
+    border: 2px solid white;
+    box-sizing: border-box;
+    font-size: 6vmin;
+    text-align: center;
+    color: white;
+    width: 100%;
+    /* height: 100%; */
+}
+
+.concert-details-body {
+    font-size: 2.5vmin;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.image-body {
+    display: inline-block;
+    margin-left: 2%;
+}
+
+.image-body>img {
+    width: 200px;
+}
+
+.venue-info {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10%;
+}
+
+.artist-name,
+.venue,
+.venue-address {
+    padding: 3%;
+    font-weight: bold;
+}
+
+span {
+    font-weight: 400;
+}
+
+.date-time {
+    text-align: center;
+    padding: 5%;
+}
+
+.date,
+.time {
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 10%;
+}
+
+#tickets {
+    width: 20vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
+
+.search-nearby {
+    border: 2px solid white;
+    box-sizing: border-box;
+    font-size: 6vmin;
+    text-align: center;
+    color: white;
+    width: 100%;
+    /* height: 100%; */
+    background-color: #4c4d52;
+}
+
+.left-btn {
+    display: inline-block;
+    text-align: left;
+}
+
+.right-btn {
+    display: inline-block;
+    text-align: right;
+}
+
+.search-btns {
+    background-color: white;
+    text-align: center;
+}
+
+.back-btns {
+    margin-top: 10px;
+}
+
+#tickets {
+    width: 20vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
+
+#restaurant,
+#bar,
+#lodging {
+    width: 20vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+    margin: 5%;
+}
+
+.results {
+    width: 40vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
+
+/* *************************GOOGLE MAPS PAGE******************************* */
+
+.google-maps {
+    height: 100%;
+    width: 100%;
+    font-size: 2.5vmin;
+}
+
+#map {
+    width: 100%;
+    height: 80%;
+}
+
+.back-to-details {
+    width: 40vmin;
     height: 7vmin;
     border-radius: 3px;
     background-color: white;

@@ -1,6 +1,6 @@
- /* Listen for the document to load and initialize the application
- * @param {function} initializeApp -
- */
+/* Listen for the document to load and initialize the application
+* @param {function} initializeApp -
+*/
 $(document).ready(initializeApp);
 
 /*
@@ -31,7 +31,8 @@ var venueSearchResults = [];
  * @returns: {undefined} none
  * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
  */
-function initializeApp(){
+function initializeApp() {
+    addClickHandlers();
 }
 
 /***************************************************************************************************
@@ -40,7 +41,16 @@ function initializeApp(){
 * @returns  {undefined}
 * using event delegation, adds click handlers to page 1 static elements and future dynamic elements
 */
-function addClickHandlers(){
+function addClickHandlers() {
+    $('#searchGenre').click(handleSearchClick);
+    $('.reset').click(startOver);
+    $('.details').on('click',  pageTransition2);
+    $(".events-body").on("click", ".details", handleDetailsClick)
+    $('.results').click(pageTransition3);
+    $('.google-maps').click(pageTransition4);
+    $('#bar').click(gotoMap);
+    $('#restaurant').click(gotoMap);
+    $('#lodging').click(gotoMap);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -51,8 +61,16 @@ function addClickHandlers(){
 * @calls page2DomCreation function
 * @calls showHidePage function (hide page1, show page2)
 */
-function handleSearchClick(){
+function handleSearchClick() {
+    var genreInput = $('#genre :selected');
+    var genre = genreInput.val();
+    var city = $('#city').val();
+    getVenueData(city, genre);
+    
+
 }
+
+
 
 /*************************************************************************************************
 * getEvents ajax function
@@ -62,26 +80,29 @@ function handleSearchClick(){
 * will need to decide data stored ie what details
 */
 
-function getVenueData(city, genre){
-  var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
-  if (city){
-    custUrl+= '&city='+ city;
-  }
-  if (genre){
-    custUrl+= '&keyword=' + genre;
-  }
+function getVenueData(city, genre) {
+    var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
+    if (city) {
+        custUrl += '&city=' + city;
+    }
+    if (genre) {
+        custUrl += '&classificationName=' + genre;
+    }
     var ajaxConfig = {
         url: custUrl,
-        success: function(result) {
-             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
-				venueSearchResults[venueI] = result._embedded.events[venueI];
-			}
-      	},
-        error: console.log('error')
-    };
+        success: function (result) {
+            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
+                venueSearchResults[venueI] = result._embedded.events[venueI];
+            }
+            page2DomCreation(venueSearchResults);
+    		pageTransition();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    }
     $.ajax(ajaxConfig);
 }
-getVenueData('irvine', 'rock'); //function run for testing purposes
 
 
 /* page2DomCreation function
@@ -101,29 +122,92 @@ function getEvents(){
 * @calls hideShowPage
 */
 
-function page2DomCreation(venueSearchResults){
-    $('#dummyBodyTag').empty(); // maybe used to clear page before rendering new elements???? idk
+function page2DomCreation(venueSearchResults) {
+    $('.events-body').empty() // maybe used to clear page before rendering new elements???? idk
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
-    function createEventElement(eventDetails){
-        let eachEventDetailBody = $('<div>');
-        let eachArtistName = $('<div>').text(eventDetails.artist);
-        let eachVenueName = $('<div>').text(eventDetails.venue);
-        let eachVenueCity = $('<div>').text(eventDetails.city);
-        let eachEventDate = $('<div>').text(eventDetails.date);
-        let eachEventTime = $('<div>').text(eventDetails.time);
-        eachEventDetailBody.append(eachArtistName, eachVenueName,eachVenueCity,eachEventDate,eachEventTime);
+    function createLightElement(eventDetails, index) {
+        var eachEventDetailBody = $('<div>', { 'class': 'light' });
+
+        var leftEventDiv = $('<div>', { 'class': 'left-event' });
+
+        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
+        var artistObject = $('<span>').text(eventDetails.name);
+        eachArtistName.append(artistObject);
+
+        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
+        var venueObject = $('<span>').text(eventDetails._embedded.venues[0].name);
+        eachVenueName.append(venueObject);
+
+        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
+        var cityObject = $('<span>').text(eventDetails._embedded.venues[0].city.name);
+        eachVenueCity.append(cityObject);
+
+        var centerEventDiv = $('<div>', { 'class': 'center-event' });
+
+        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
+        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        eachEventDate.append(dateObject);
+
+        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
+        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
+        eachEventTime.append(timeObject);
+
+        var rightEventDiv = $('<div>', { 'class': 'right-event' });
+        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': index, text: 'DETAILS' });
+
+        rightEventDiv.append(buttonObject);
+        leftEventDiv.append(eachArtistName, eachVenueName);
+        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
+        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
+        return eachEventDetailBody;
+    }
+
+    function createDarkElement(eventDetails, index) {
+        var eachEventDetailBody = $('<div>', { 'class': 'dark' });
+
+        var leftEventDiv = $('<div>', { 'class': 'left-event' });
+
+        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
+        var artistObject = $('<span>').text(eventDetails.name);
+        eachArtistName.append(artistObject);
+
+        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
+        var venueObject = $('<span>').text(eventDetails._embedded.venues[0].name);
+        eachVenueName.append(venueObject);
+
+        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
+        var cityObject = $('<span>').text(eventDetails._embedded.venues[0].city.name);
+        eachVenueCity.append(cityObject);
+
+        var centerEventDiv = $('<div>', { 'class': 'center-event' });
+
+        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
+        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        eachEventDate.append(dateObject);
+
+        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
+        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
+        eachEventTime.append(timeObject);
+
+        var rightEventDiv = $('<div>', { 'class': 'right-event' });
+        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': index, text: 'DETAILS' });
+
+        rightEventDiv.append(buttonObject);
+        leftEventDiv.append(eachArtistName, eachVenueName);
+        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
+        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
+        return eachEventDetailBody;
     }
     //loops through and creates each individual element and appends to the DOM
-    for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++){
-        let singleDomElement = createEventElement(venueSearchResults[resultIndex]);
+    for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
         //rebecca wanted to add 2 different classes to style every other line differnetly
-        if(resultIndex % 2 === 0){
-            singleDomElement.addClass('dark');
-            $('#dummyBodyTag').append(singleDomElement);
+        if (resultIndex % 2 === 0) {
+            var temp = createLightElement(venueSearchResults[resultIndex], resultIndex)
+            $('.events-body').append(temp);
         } else {
-            singleDomElement.addClass('light');
-            $('#dummyBodyTag').append(singleDomElement);
+        	var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
+            $('.events-body').append(temp);
         }
     }
 }
@@ -133,7 +217,7 @@ function page2DomCreation(venueSearchResults){
 * @params which page to show, which page to hide
 * will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
 */
-function showHidePage(){
+function showHidePage() {
 }
 /*************************************************************************************************
 * handlePage3Details
@@ -142,7 +226,49 @@ function showHidePage(){
 * variables for lat and long are stored to be passed later
 * this page will have 2 links for searchForBarsNearby and searchForRestuarantsNearby function with lat and long as params
 */
-function handlePage3Details(){
+
+/************************************************************************************************** 
+ * pageTransition
+ * hides and shows divs as needed
+*/
+
+function pageTransition() {
+    $('.home').addClass('hidden');
+    $('.event-results').removeClass('hidden');
+}
+//transition from page 2 to 3
+function pageTransition2() {
+    $('.event-results').addClass('hidden');
+    $('.concert-details').removeClass('hidden');
+
+}
+//back to search results
+function pageTransition3() {
+    $('.event-results').removeClass('hidden');
+    $('.concert-details').addClass('hidden');
+
+}
+//back to concert details
+function pageTransition4() {
+    $('.google-maps').addClass('hidden');
+    $('.concert-details').removeClass('hidden');
+
+}
+
+function gotoMap() {
+    $('.google-maps').removeClass('hidden');
+    $('.concert-details').addClass('hidden');
+
+}
+
+function handleDetailsClick(){
+	var detailsIndex = $(this).attr('arrayindex');
+	handlePage3Details(venueSearchResults[detailsIndex]);
+	pageTransition2();
+}
+
+
+function handlePage3Details() {
 }
 /*************************************************************************************************
 * searchForBarsNearby
@@ -151,7 +277,7 @@ function handlePage3Details(){
 * @calls run google ajax call and populate data onto page4
 * create links on the dropped markers near venue to viewYelpInfo with param of business selected
 */
-function searchForBarsNearby(){
+function searchForBarsNearby() {
 }
 
 /*************************************************************************************************
@@ -161,7 +287,7 @@ function searchForBarsNearby(){
 * @calls run google ajax call and populate data onto page4
 * create links on the dropped markers near venue to viewYelpInfo with param of business selected
 */
-function searchForRestaurantsNearby(){
+function searchForRestaurantsNearby() {
 }
 
 /*************************************************************************************************
@@ -171,7 +297,7 @@ function searchForRestaurantsNearby(){
 * @calls showHidePage function hide page 4 show page 5
 * @calls button on page to run startOver function
 */
-function viewYelpInfo(){
+function viewYelpInfo() {
 }
 
 /* initializeMap
@@ -239,6 +365,8 @@ function createMarker(place) {
                 contentStr += '<br>' + '</p>';
                 infowindow.setContent(contentStr);
                 infowindow.open(map, marker);
+                console.log('place:', place);
+                console.log('test place:', place.name, place.address_components[0].short_name, place.address_components[1].short_name, place.address_components[3].short_name);
             } else {
                 var contentStr = "<h5>No Result, status=" + status + "</h5>";
                 infowindow.setContent(contentStr);
@@ -246,6 +374,9 @@ function createMarker(place) {
             }
         });
     });
+
+    var name = place.name;
+    var address = place.formatted_address;
 }
 
 
@@ -286,35 +417,18 @@ function getYelpInfo(name, address1, city) {
         console.log(response);
     });
 }
-
 getYelpInfo('The Oyster Bar SKC', '2626 E Katella Ave', 'Anaheim');
 
- function getVenueData(city, genre){
-     var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
-     if (city){
-         custUrl+= '&city='+ city;
-     }
-     if (genre){
-         custUrl+= '&keyword=' + genre;
-     }
-     var ajaxConfig = {
-         url: custUrl,
-         success: function(result) {
-             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
-                 venueSearchResults[venueI] = result._embedded.events[venueI];
-             }
-         },
-         error: console.log('error')
-     };
-     $.ajax(ajaxConfig);
- }
 
 /*************************************************************************************************
 * startOver function
 
 * basically reset button, go back to page one and empty array
 */
-function startOver(){
+function startOver() {
+    $('.event-results').addClass('hidden');
+    $('.concert-details').addClass('hidden');
+    $('.home').removeClass('hidden');
 }
 
 /*************************************************************************************************
