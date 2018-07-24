@@ -42,7 +42,7 @@ function initializeApp() {
 * using event delegation, adds click handlers to page 1 static elements and future dynamic elements
 */
 function addClickHandlers() {
-    $('#searchGenre').click(handleSearchClick, pageTransition);
+    $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
     $('.details').click(pageTransition2);
     $('.results').click(pageTransition3);
@@ -61,6 +61,8 @@ function handleSearchClick() {
     var genre = genreInput.val();
     var city = $('#city').val();
     getVenueData(city, genre);
+    page2DomCreation(venueSearchResults);
+    pageTransition();
 
 }
 
@@ -121,77 +123,80 @@ function page2DomCreation(venueSearchResults) {
     $('.events-body').empty() // maybe used to clear page before rendering new elements???? idk
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
-    function createLightElement(eventDetails) {
-        let eachEventDetailBody = $('<div>', { 'class': 'light' });
+    function createLightElement(eventDetails, index) {
+        var eachEventDetailBody = $('<div>', { 'class': 'light' });
 
-        let leftEventDiv = $('<div>', { 'class': 'left-event' });
+        var leftEventDiv = $('<div>', { 'class': 'left-event' });
 
-        let eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
-        let artistObject = $('<span>').text(eventDetails.name);
+        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
+        var artistObject = $('<span>').text(eventDetails.name);
         eachArtistName.append(artistObject);
 
-        let eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
-        let venueObject = $('<span>').text(eventDetails.venue);
+        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
+        var venueObject = $('<span>').text(eventDetails._embedded.venues[0].name);
         eachVenueName.append(venueObject);
 
-        let eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
-        let cityObject = $('<span>').text(eventDetails.city);
+        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
+        var cityObject = $('<span>').text(eventDetails._embedded.venues[0].city.name);
         eachVenueCity.append(cityObject);
 
-        let centerEventDiv = $('<div>', { 'class': 'center-event' });
+        var centerEventDiv = $('<div>', { 'class': 'center-event' });
 
-        let eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        let dateObject = $('<span>').text(eventDetails.date);
-        eachEventdate.append(dateObject);
+        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
+        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        eachEventDate.append(dateObject);
 
-        let eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        let timeObject = $('<span>').text(eventDetails.time);
+        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
+        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
         eachEventTime.append(timeObject);
 
-        let rightEventDiv = $('<div>', { 'class': 'left-event' });
-        let buttonObject = $('<button>', { 'type': 'button', 'id': 'details', text: 'DETAILS' });
+        var rightEventDiv = $('<div>', { 'class': 'right-event' });
+        var buttonObject = $('<button>', { 'type': 'button', 'id': 'details', 'arrayindex': index, text: 'DETAILS' });
 
         rightEventDiv.append(buttonObject);
-        leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
-        centerEventDiv.append(eachEventDate, eachEventTime);
+        leftEventDiv.append(eachArtistName, eachVenueName);
+        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
         eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
         return eachEventDetailBody;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 043662c9cd60955ffbf5e9f319c3475cc172c108
     }
 
-    function createDarkElement(eventDetails) {
-        let eachEventDetailBody = $('<div>', { 'class': 'dark' });
+    function createDarkElement(eventDetails, index) {
+        var eachEventDetailBody = $('<div>', { 'class': 'dark' });
 
-        let leftEventDiv = $('<div>', { 'class': 'left-event' });
+        var leftEventDiv = $('<div>', { 'class': 'left-event' });
 
-        let eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
-        let artistObject = $('<span>').text(eventDetails.name);
+        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
+        var artistObject = $('<span>').text(eventDetails.name);
         eachArtistName.append(artistObject);
 
-        let eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
-        let venueObject = $('<span>').text(eventDetails.venue);
+        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
+        var venueObject = $('<span>').text(eventDetails._embedded.venues[0].name);
         eachVenueName.append(venueObject);
 
-        let eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
-        let cityObject = $('<span>').text(eventDetails.city);
+        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
+        var cityObject = $('<span>').text(eventDetails._embedded.venues[0].city.name);
         eachVenueCity.append(cityObject);
 
-        let centerEventDiv = $('<div>', { 'class': 'center-event' });
+        var centerEventDiv = $('<div>', { 'class': 'center-event' });
 
-        let eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        let dateObject = $('<span>').text(eventDetails.date);
-        eachEventdate.append(dateObject);
+        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
+        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        eachEventDate.append(dateObject);
 
-        let eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        let timeObject = $('<span>').text(eventDetails.time);
+        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
+        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
         eachEventTime.append(timeObject);
 
-        let rightEventDiv = $('<div>', { 'class': 'left-event' });
-        let buttonObject = $('<button>', { 'type': 'button', 'id': 'details', text: 'DETAILS' });
+        var rightEventDiv = $('<div>', { 'class': 'right-event' });
+        var buttonObject = $('<button>', { 'type': 'button', 'id': 'details', 'arrayindex': index, text: 'DETAILS' });
 
         rightEventDiv.append(buttonObject);
-        leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
-        centerEventDiv.append(eachEventDate, eachEventTime);
+        leftEventDiv.append(eachArtistName, eachVenueName);
+        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
         eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
         return eachEventDetailBody;
     }
@@ -199,9 +204,11 @@ function page2DomCreation(venueSearchResults) {
     for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
         //rebecca wanted to add 2 different classes to style every other line differnetly
         if (resultIndex % 2 === 0) {
-            $('.events-body').append(createLightElement(venueSearchResults[resultIndex]));
+            var temp = createLightElement(venueSearchResults[resultIndex], resultIndex)
+            $('.events-body').append(temp);
         } else {
-            $('.events-body').append(createDarkElement(venueSearchResults[resultIndex]));
+        	var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
+            $('.events-body').append(temp);
         }
     }
 }
