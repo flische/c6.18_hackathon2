@@ -158,10 +158,6 @@ function page2DomCreation(venueSearchResults) {
         centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
         eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
         return eachEventDetailBody;
-<<<<<<< HEAD
-
-=======
->>>>>>> 043662c9cd60955ffbf5e9f319c3475cc172c108
     }
 
     function createDarkElement(eventDetails, index) {
