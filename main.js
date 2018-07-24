@@ -5,8 +5,9 @@
 
 /*
 area for globals
-venueSearchResults = [];
 */
+var venueSearchResults = [];
+
 
 /*initialize app function
 *call addClickHandlers function
@@ -29,6 +30,27 @@ venueSearchResults = [];
 * runs ticketmaster ajax call and stores result into global array
 * will need to decide data stored ie what details
 */
+
+function getVenueData(city, genre){
+  var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
+  if (city){
+    custUrl+= '&city='+ city;
+  }
+  if (genre){
+    custUrl+= '&keyword=' + genre;
+  }
+    var ajaxConfig = {
+        url: custUrl,
+        success: function(result) {
+             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
+				venueSearchResults[venueI] = result._embedded.events[venueI];
+			}
+      	},
+        error: console.log('error')
+    }
+    $.ajax(ajaxConfig);
+}
+getVenueData('irvine', 'rock'); //function run for testing purposes
 
 
 /* page2DomCreation function
