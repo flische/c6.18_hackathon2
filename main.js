@@ -36,6 +36,26 @@ venueSearchResults = [];
 *will create a link on each dom element, possible store index number into dom element to be referenced later
 *dom element link will call handlePage3Details function with dom index as param, then call hideShowPage function
 */
+function page2DomCreation(venueSearchResults){
+    $('#dummyBodyTag').empty() // maybe used to clear page before rendering new elements???? idk
+
+    //creates a single element that contains the details for the event and appends them to the a single div
+    //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
+    function createEventElement(eventDetails){
+        let eachEventDetailBody = $('<div>')
+        let eachArtistName = $('<div>').text(eventDetails.artist);
+        let eachVenueName = $('<div>').text(eventDetails.venue);
+        let eachVenueCity = $('<div>').text(eventDetails.city);
+        let eachEventDate = $('<div>').text(eventDetails.date);
+        let eachEventTime = $('<div>').text(eventDetails.time);
+        eachEventDetailBody.append(eachArtistName, eachVenueName,eachVenueCity,eachEventDate,eachEventTime);
+    }
+    for (var resultIndex = 0; resultIndex < venueSearchResults.length; index++){
+        //loops through and creates each individual element and appends to the DOM
+        $('#dummyBodyTag').append(createEventElement(venueSearchResults[i]));
+    }
+}
+
 
 /*showHidePage function
 *params which page to show, which page to hide
