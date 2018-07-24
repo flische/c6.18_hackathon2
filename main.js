@@ -1,6 +1,6 @@
- /* Listen for the document to load and initialize the application
- * @param {function} initializeApp -
- */
+/* Listen for the document to load and initialize the application
+* @param {function} initializeApp -
+*/
 $(document).ready(initializeApp);
 
 /*
@@ -31,8 +31,8 @@ var venueSearchResults = [];
  * @returns: {undefined} none
  * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
  */
-function initializeApp(){
-	addClickHandlers();
+function initializeApp() {
+    addClickHandlers();
 }
 
 /***************************************************************************************************
@@ -41,8 +41,11 @@ function initializeApp(){
 * @returns  {undefined}
 * using event delegation, adds click handlers to page 1 static elements and future dynamic elements
 */
-function addClickHandlers(){
-	$('#searchGenre').click(handleSearchClick);
+function addClickHandlers() {
+    $('#searchGenre').click(handleSearchClick, pageTransition);
+    $('.reset').click(startOver);
+    $('.details').click(pageTransition2);
+    $('.results').click(pageTransition3);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -53,13 +56,15 @@ function addClickHandlers(){
 * @calls page2DomCreation function
 * @calls showHidePage function (hide page1, show page2)
 */
-function handleSearchClick(){
-	var genreInput = $('#genre :selected');
-  	var genre = genreInput.val();
-  	var city = $('#city').val();
-  	getVenueData(city, genre);
-  	
+function handleSearchClick() {
+    var genreInput = $('#genre :selected');
+    var genre = genreInput.val();
+    var city = $('#city').val();
+    getVenueData(city, genre);
+
 }
+
+
 
 /*************************************************************************************************
 * getEvents ajax function
@@ -70,23 +75,23 @@ function handleSearchClick(){
 */
 
 
-function getVenueData(city, genre){
-  var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
-  if (city){
-    custUrl+= '&city='+ city;
-  }
-  if (genre){
-    custUrl+= '&classificationName=' + genre;
-  }
+function getVenueData(city, genre) {
+    var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
+    if (city) {
+        custUrl += '&city=' + city;
+    }
+    if (genre) {
+        custUrl += '&classificationName=' + genre;
+    }
     var ajaxConfig = {
         url: custUrl,
-        success: function(result){
-		            for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
-						venueSearchResults[venueI] = result._embedded.events[venueI];
-					}
-      			},
-        error: function(err) {
-        	console.log(err);
+        success: function (result) {
+            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
+                venueSearchResults[venueI] = result._embedded.events[venueI];
+            }
+        },
+        error: function (err) {
+            console.log(err);
         }
     }
     $.ajax(ajaxConfig);
@@ -112,85 +117,85 @@ function getEvents(){
 * @calls hideShowPage
 */
 
-function page2DomCreation(venueSearchResults){
+function page2DomCreation(venueSearchResults) {
     $('.events-body').empty() // maybe used to clear page before rendering new elements???? idk
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
-    function createLightElement(eventDetails){
-        let eachEventDetailBody = $('<div>',{'class': 'light'});
+    function createLightElement(eventDetails) {
+        let eachEventDetailBody = $('<div>', { 'class': 'light' });
 
-        let leftEventDiv = $('<div>',{'class': 'left-event'});
+        let leftEventDiv = $('<div>', { 'class': 'left-event' });
 
-        let eachArtistName = $('<div>', {'class': 'artist', text: 'ARTIST: '});
+        let eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
         let artistObject = $('<span>').text(eventDetails.name);
         eachArtistName.append(artistObject);
 
-        let eachVenueName = $('<div>',{'class': 'venue', text: 'VENUE: '});
+        let eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
         let venueObject = $('<span>').text(eventDetails.venue);
         eachVenueName.append(venueObject);
 
-        let eachVenueCity = $('<div>', {'class': 'results-city', text: 'CITY: '});
+        let eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
         let cityObject = $('<span>').text(eventDetails.city);
         eachVenueCity.append(cityObject);
 
-        let centerEventDiv = $('<div>',{'class': 'center-event'});
+        let centerEventDiv = $('<div>', { 'class': 'center-event' });
 
-        let eachEventDate = $('<div>', {'class': 'date', text: 'DATE: '});
+        let eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
         let dateObject = $('<span>').text(eventDetails.date);
         eachEventdate.append(dateObject);
 
-        let eachEventTime = $('<div>', {'class': 'time', text: 'TIME: '});
+        let eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
         let timeObject = $('<span>').text(eventDetails.time);
         eachEventTime.append(timeObject);
 
-        let rightEventDiv = $('<div>',{'class': 'left-event'});
-        let buttonObject = $('<button>', {'type': 'button', 'id': 'details', text: 'DETAILS'});
+        let rightEventDiv = $('<div>', { 'class': 'left-event' });
+        let buttonObject = $('<button>', { 'type': 'button', 'id': 'details', text: 'DETAILS' });
 
         rightEventDiv.append(buttonObject);
         leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
-        centerEventDiv.append(eachEventDate,eachEventTime);
-        eachEventDetailBody.append(leftEventDiv,centerEventDiv,rightEventDiv);
+        centerEventDiv.append(eachEventDate, eachEventTime);
+        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
     }
 
-    function createDarkElement(eventDetails){
-        let eachEventDetailBody = $('<div>',{'class': 'dark'});
+    function createDarkElement(eventDetails) {
+        let eachEventDetailBody = $('<div>', { 'class': 'dark' });
 
-        let leftEventDiv = $('<div>',{'class': 'left-event'});
+        let leftEventDiv = $('<div>', { 'class': 'left-event' });
 
-        let eachArtistName = $('<div>', {'class': 'artist', text: 'ARTIST: '});
+        let eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
         let artistObject = $('<span>').text(eventDetails.name);
         eachArtistName.append(artistObject);
 
-        let eachVenueName = $('<div>',{'class': 'venue', text: 'VENUE: '});
+        let eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
         let venueObject = $('<span>').text(eventDetails.venue);
         eachVenueName.append(venueObject);
 
-        let eachVenueCity = $('<div>', {'class': 'results-city', text: 'CITY: '});
+        let eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
         let cityObject = $('<span>').text(eventDetails.city);
         eachVenueCity.append(cityObject);
 
-        let centerEventDiv = $('<div>',{'class': 'center-event'});
+        let centerEventDiv = $('<div>', { 'class': 'center-event' });
 
-        let eachEventDate = $('<div>', {'class': 'date', text: 'DATE: '});
+        let eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
         let dateObject = $('<span>').text(eventDetails.date);
         eachEventdate.append(dateObject);
 
-        let eachEventTime = $('<div>', {'class': 'time', text: 'TIME: '});
+        let eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
         let timeObject = $('<span>').text(eventDetails.time);
         eachEventTime.append(timeObject);
 
-        let rightEventDiv = $('<div>',{'class': 'left-event'});
-        let buttonObject = $('<button>', {'type': 'button', 'id': 'details', text: 'DETAILS'});
+        let rightEventDiv = $('<div>', { 'class': 'left-event' });
+        let buttonObject = $('<button>', { 'type': 'button', 'id': 'details', text: 'DETAILS' });
 
         rightEventDiv.append(buttonObject);
         leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
-        centerEventDiv.append(eachEventDate,eachEventTime);
-        eachEventDetailBody.append(leftEventDiv,centerEventDiv,rightEventDiv);
+        centerEventDiv.append(eachEventDate, eachEventTime);
+        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
     }
     //loops through and creates each individual element and appends to the DOM
-    for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++){
+    for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
         //rebecca wanted to add 2 different classes to style every other line differnetly
-        if(resultIndex % 2 === 0){
+        if (resultIndex % 2 === 0) {
             $('.events-body').append(createLightElement(venueSearchResults[resultIndex]));
         } else {
             $('.events-body').append(createDarkElement(venueSearchResults[resultIndex]));
@@ -203,7 +208,7 @@ function page2DomCreation(venueSearchResults){
 * @params which page to show, which page to hide
 * will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
 */
-function showHidePage(){
+function showHidePage() {
 }
 /*************************************************************************************************
 * handlePage3Details
@@ -212,7 +217,33 @@ function showHidePage(){
 * variables for lat and long are stored to be passed later
 * this page will have 2 links for searchForBarsNearby and searchForRestuarantsNearby function with lat and long as params
 */
-function handlePage3Details(){
+
+/************************************************************************************************** 
+ * pageTransition
+ * hides and shows divs as needed
+*/
+
+function pageTransition() {
+    $('.home').addClass('hidden');
+    $('.event-results').removeClass('hidden');
+}
+//transition from page 2 to 3
+function pageTransition2() {
+    $('.event-results').addClass('hidden');
+    $('.concert-details').removeClass('hidden');
+
+}
+//back to search results
+function pageTransition3() {
+    $('.event-results').removeClass('hidden');
+    $('.concert-details').addClass('hidden');
+
+}
+
+
+
+
+function handlePage3Details() {
 }
 /*************************************************************************************************
 * searchForBarsNearby
@@ -221,7 +252,7 @@ function handlePage3Details(){
 * @calls run google ajax call and populate data onto page4
 * create links on the dropped markers near venue to viewYelpInfo with param of business selected
 */
-function searchForBarsNearby(){
+function searchForBarsNearby() {
 }
 
 /*************************************************************************************************
@@ -231,7 +262,7 @@ function searchForBarsNearby(){
 * @calls run google ajax call and populate data onto page4
 * create links on the dropped markers near venue to viewYelpInfo with param of business selected
 */
-function searchForRestaurantsNearby(){
+function searchForRestaurantsNearby() {
 }
 
 /*************************************************************************************************
@@ -241,7 +272,7 @@ function searchForRestaurantsNearby(){
 * @calls showHidePage function hide page 4 show page 5
 * @calls button on page to run startOver function
 */
-function viewYelpInfo(){
+function viewYelpInfo() {
 }
 
 /* initializeMap
@@ -333,7 +364,10 @@ function createMarker(place) {
 
 * basically reset button, go back to page one and empty array
 */
-function startOver(){
+function startOver() {
+    $('.event-results').addClass('hidden');
+    $('.concert-details').addClass('hidden');
+    $('.home').removeClass('hidden');
 }
 
 /*************************************************************************************************
