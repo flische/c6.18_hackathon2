@@ -32,6 +32,7 @@ var venueSearchResults = [];
  * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
  */
 function initializeApp(){
+	addClickHandlers();
 }
 
 /***************************************************************************************************
@@ -41,6 +42,7 @@ function initializeApp(){
 * using event delegation, adds click handlers to page 1 static elements and future dynamic elements
 */
 function addClickHandlers(){
+	$('#searchGenre').click(handleSearchClick);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -52,6 +54,11 @@ function addClickHandlers(){
 * @calls showHidePage function (hide page1, show page2)
 */
 function handleSearchClick(){
+	var genreInput = $('#genre :selected');
+  	var genre = genreInput.val();
+  	var city = $('#city').val();
+  	getVenueData(city, genre);
+  	
 }
 
 /*************************************************************************************************
@@ -69,19 +76,22 @@ function getVenueData(city, genre){
     custUrl+= '&city='+ city;
   }
   if (genre){
-    custUrl+= '&keyword=' + genre;
+    custUrl+= '&classificationName=' + genre;
   }
     var ajaxConfig = {
         url: custUrl,
-        success: function(result) {
-             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
-				venueSearchResults[venueI] = result._embedded.events[venueI];
-			}
-      	},
-        error: console.log('error')
+        success: function(result){
+		            for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
+						venueSearchResults[venueI] = result._embedded.events[venueI];
+					}
+      			},
+        error: function(err) {
+        	console.log(err);
+        }
     }
     $.ajax(ajaxConfig);
 }
+
 getVenueData('irvine', 'rock'); //function run for testing purposes
 
 
@@ -103,28 +113,87 @@ function getEvents(){
 */
 
 function page2DomCreation(venueSearchResults){
-    $('#dummyBodyTag').empty() // maybe used to clear page before rendering new elements???? idk
+    $('.events-body').empty() // maybe used to clear page before rendering new elements???? idk
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
-    function createEventElement(eventDetails){
-        let eachEventDetailBody = $('<div>')
-        let eachArtistName = $('<div>').text(eventDetails.artist);
-        let eachVenueName = $('<div>').text(eventDetails.venue);
-        let eachVenueCity = $('<div>').text(eventDetails.city);
-        let eachEventDate = $('<div>').text(eventDetails.date);
-        let eachEventTime = $('<div>').text(eventDetails.time);
-        eachEventDetailBody.append(eachArtistName, eachVenueName,eachVenueCity,eachEventDate,eachEventTime);
+    function createLightElement(eventDetails){
+        let eachEventDetailBody = $('<div>',{'class': 'light'});
+
+        let leftEventDiv = $('<div>',{'class': 'left-event'});
+
+        let eachArtistName = $('<div>', {'class': 'artist', text: 'ARTIST: '});
+        let artistObject = $('<span>').text(eventDetails.name);
+        eachArtistName.append(artistObject);
+
+        let eachVenueName = $('<div>',{'class': 'venue', text: 'VENUE: '});
+        let venueObject = $('<span>').text(eventDetails.venue);
+        eachVenueName.append(venueObject);
+
+        let eachVenueCity = $('<div>', {'class': 'results-city', text: 'CITY: '});
+        let cityObject = $('<span>').text(eventDetails.city);
+        eachVenueCity.append(cityObject);
+
+        let centerEventDiv = $('<div>',{'class': 'center-event'});
+
+        let eachEventDate = $('<div>', {'class': 'date', text: 'DATE: '});
+        let dateObject = $('<span>').text(eventDetails.date);
+        eachEventdate.append(dateObject);
+
+        let eachEventTime = $('<div>', {'class': 'time', text: 'TIME: '});
+        let timeObject = $('<span>').text(eventDetails.time);
+        eachEventTime.append(timeObject);
+
+        let rightEventDiv = $('<div>',{'class': 'left-event'});
+        let buttonObject = $('<button>', {'type': 'button', 'id': 'details', text: 'DETAILS'});
+
+        rightEventDiv.append(buttonObject);
+        leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
+        centerEventDiv.append(eachEventDate,eachEventTime);
+        eachEventDetailBody.append(leftEventDiv,centerEventDiv,rightEventDiv);
+    }
+
+    function createDarkElement(eventDetails){
+        let eachEventDetailBody = $('<div>',{'class': 'dark'});
+
+        let leftEventDiv = $('<div>',{'class': 'left-event'});
+
+        let eachArtistName = $('<div>', {'class': 'artist', text: 'ARTIST: '});
+        let artistObject = $('<span>').text(eventDetails.name);
+        eachArtistName.append(artistObject);
+
+        let eachVenueName = $('<div>',{'class': 'venue', text: 'VENUE: '});
+        let venueObject = $('<span>').text(eventDetails.venue);
+        eachVenueName.append(venueObject);
+
+        let eachVenueCity = $('<div>', {'class': 'results-city', text: 'CITY: '});
+        let cityObject = $('<span>').text(eventDetails.city);
+        eachVenueCity.append(cityObject);
+
+        let centerEventDiv = $('<div>',{'class': 'center-event'});
+
+        let eachEventDate = $('<div>', {'class': 'date', text: 'DATE: '});
+        let dateObject = $('<span>').text(eventDetails.date);
+        eachEventdate.append(dateObject);
+
+        let eachEventTime = $('<div>', {'class': 'time', text: 'TIME: '});
+        let timeObject = $('<span>').text(eventDetails.time);
+        eachEventTime.append(timeObject);
+
+        let rightEventDiv = $('<div>',{'class': 'left-event'});
+        let buttonObject = $('<button>', {'type': 'button', 'id': 'details', text: 'DETAILS'});
+
+        rightEventDiv.append(buttonObject);
+        leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
+        centerEventDiv.append(eachEventDate,eachEventTime);
+        eachEventDetailBody.append(leftEventDiv,centerEventDiv,rightEventDiv);
     }
     //loops through and creates each individual element and appends to the DOM
     for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++){
-        let singleDomElement = createEventElement(venueSearchResults[resultIndex]);
         //rebecca wanted to add 2 different classes to style every other line differnetly
         if(resultIndex % 2 === 0){
-            singleDomElement.addClass('dark');
-            $('#dummyBodyTag').append(singleDomElement);
+            $('.events-body').append(createLightElement(venueSearchResults[resultIndex]));
         } else {
-            singleDomElement.addClass('light');
-            $('#dummyBodyTag').append(singleDomElement);
+            $('.events-body').append(createDarkElement(venueSearchResults[resultIndex]));
         }
     }
 }
