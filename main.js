@@ -62,8 +62,7 @@ function handleSearchClick() {
     var genre = genreInput.val();
     var city = $('#city').val();
     getVenueData(city, genre);
-    page2DomCreation(venueSearchResults);
-    pageTransition();
+    
 
 }
 
@@ -92,6 +91,8 @@ function getVenueData(city, genre) {
             for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
                 venueSearchResults[venueI] = result._embedded.events[venueI];
             }
+            page2DomCreation(venueSearchResults);
+    		pageTransition();
         },
         error: function (err) {
             console.log(err);
@@ -99,8 +100,6 @@ function getVenueData(city, genre) {
     }
     $.ajax(ajaxConfig);
 }
-
-getVenueData('irvine', 'rock'); //function run for testing purposes
 
 
 /* page2DomCreation function
