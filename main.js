@@ -32,6 +32,7 @@ var venueSearchResults = [];
  * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
  */
 function initializeApp(){
+	addClickHandlers();
 }
 
 /***************************************************************************************************
@@ -41,6 +42,7 @@ function initializeApp(){
 * using event delegation, adds click handlers to page 1 static elements and future dynamic elements
 */
 function addClickHandlers(){
+	$('#searchGenre').click(handleSearchClick);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -52,6 +54,11 @@ function addClickHandlers(){
 * @calls showHidePage function (hide page1, show page2)
 */
 function handleSearchClick(){
+	var genreInput = $('#genre :selected');
+  	var genre = genreInput.val();
+  	var city = $('#city').val();
+  	getVenueData(city, genre);
+  	
 }
 
 /*************************************************************************************************
@@ -73,15 +80,18 @@ function getVenueData(city, genre){
   }
     var ajaxConfig = {
         url: custUrl,
-        success: function(result) {
-             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
-				venueSearchResults[venueI] = result._embedded.events[venueI];
-			}
-      	},
-        error: console.log('error')
+        success: function(result){
+		            for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
+						venueSearchResults[venueI] = result._embedded.events[venueI];
+					}
+      			},
+        error: function(err) {
+        	console.log(err);
+        }
     }
     $.ajax(ajaxConfig);
 }
+
 getVenueData('irvine', 'rock'); //function run for testing purposes
 
 
