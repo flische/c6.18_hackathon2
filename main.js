@@ -47,6 +47,10 @@ function addClickHandlers() {
     $('.details').on('click',  pageTransition2);
     $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
+    $('.google-maps').click(pageTransition4);
+    $('#bar').click(gotoMap);
+    $('#restaurant').click(gotoMap);
+    $('#lodging').click(gotoMap);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -245,6 +249,18 @@ function pageTransition3() {
     $('.concert-details').addClass('hidden');
 
 }
+//back to concert details
+function pageTransition4() {
+    $('.google-maps').addClass('hidden');
+    $('.concert-details').removeClass('hidden');
+
+}
+
+function gotoMap() {
+    $('.google-maps').removeClass('hidden');
+    $('.concert-details').addClass('hidden');
+
+}
 
 function handleDetailsClick(){
 	var detailsIndex = $(this).attr('arrayindex');
@@ -350,6 +366,8 @@ function createMarker(place) {
                 contentStr += '<br>' + '</p>';
                 infowindow.setContent(contentStr);
                 infowindow.open(map, marker);
+                console.log('place:', place);
+                console.log('test place:', place.name, place.address_components[0].short_name, place.address_components[1].short_name, place.address_components[3].short_name);
             } else {
                 var contentStr = "<h5>No Result, status=" + status + "</h5>";
                 infowindow.setContent(contentStr);
@@ -357,6 +375,9 @@ function createMarker(place) {
             }
         });
     });
+
+    var name = place.name;
+    var address = place.formatted_address;
 }
 
 

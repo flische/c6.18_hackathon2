@@ -6,6 +6,7 @@ body {
     margin: 0 auto;
     background-color: #4c4d52;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 0;
 }
 
 header {
@@ -16,13 +17,16 @@ header {
     font-size: 9vmin;
     font-weight: bold;
     letter-spacing: 4px;
-    padding-top: 1%;
-    height: 15%;
+    height: 12%;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .main {
     font-size: 0;
+    height: 85%;
+    width: 100%;
 }
 
 .left,
@@ -82,12 +86,6 @@ input {
     font-size: 3vmin;
 }
 
-#map {
-    display: none;
-    height: 500px;
-    width: 500px;
-}
-
 .city,
 .genre {
     font-size: 2vmin;
@@ -121,7 +119,7 @@ input {
     text-align: center;
     color: white;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .event-header>p {
@@ -134,7 +132,7 @@ input {
     font-size: 2.5vmin;
     background-color: white;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .dark {
@@ -203,7 +201,7 @@ input {
     text-align: center;
     color: white;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .concert-details-body {
@@ -266,7 +264,7 @@ span {
     text-align: center;
     color: white;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     background-color: #4c4d52;
 }
 
@@ -283,6 +281,10 @@ span {
 .search-btns {
     background-color: white;
     text-align: center;
+}
+
+.back-btns {
+    margin-top: 10px;
 }
 
 #tickets {
@@ -310,3 +312,25 @@ span {
     border-radius: 3px;
     background-color: white;
     font-size: 2vmin;
+}
+
+/* *************************GOOGLE MAPS PAGE******************************* */
+
+.google-maps {
+    height: 100%;
+    width: 100%;
+    font-size: 2.5vmin;
+}
+
+#map {
+    width: 100%;
+    height: 80%;
+}
+
+.back-to-details {
+    width: 40vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
