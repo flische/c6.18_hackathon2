@@ -1,7 +1,3 @@
-
-var venueSearchResults = [];
-
-
  /* Listen for the document to load and initialize the application
  * @param {function} initializeApp -
  */
@@ -15,6 +11,7 @@ $(document).ready(initializeApp);
 * venueSearchResults = []; - global array to hold search results
 * @type {Array}
 */
+var venueSearchResults = [];
 
 /***************************************************************************************************
  * initializeApp
