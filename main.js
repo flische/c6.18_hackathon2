@@ -9,8 +9,8 @@ venueSearchResults = [];
 */
 var map;
 var service;
-var latitude = 33.69
-var longitude = -117.83
+var latitude = 33.69;
+var longitude = -117.83;
 /*initialize app function
 *call addClickHandlers function
 *no params or returns
@@ -79,7 +79,6 @@ function handleSearchClick() {
 * @returns runs ticketmaster ajax call and stores result into global array
 * will need to decide data stored ie what details
 */
-
 
 function getVenueData(city, genre) {
     var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
@@ -385,10 +384,41 @@ function createMarker(place) {
 *params businessSelected
 *run yelp api, store results and populate data onto page5 template
 *showHidePage function hide page 4 show page 5
-*button on page to run startover function
-/*
+*button on page to run startOver function
+*/
+function getYelpInfo(name, address1, city) {
+     var customURL = "https://yelp.ongandy.com/businesses/matches";
+     if(name) {
+         customURL+= "?name=" + name;
+     }
+     if(address1) {
+         customURL+= "&address1=" + address1;
+     }
+     if(city) {
+         customURL+= "&city=" + city + "&state=CA&country=US";
+     }
+     console.log('here is our custom URL', customURL);
 
-/* startover function
+     var ajaxConfig = {
+        "url": customURL,
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+        },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    };
+    $.ajax(ajaxConfig).done(function (response) {
+        console.log(response);
+    });
+}
+getYelpInfo('The Oyster Bar SKC', '2626 E Katella Ave', 'Anaheim');
+
 
 /*************************************************************************************************
 * startOver function
