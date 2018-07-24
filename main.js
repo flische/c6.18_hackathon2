@@ -44,7 +44,6 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $('.details').on('click',  pageTransition2);
     $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
     $('.google-maps').click(pageTransition4);
