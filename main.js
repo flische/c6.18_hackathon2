@@ -248,8 +248,9 @@ function pageTransition3() {
 
 
 
-
+//passing in the index into this function
 function handlePage3Details() {
+    //
 }
 /*************************************************************************************************
 * searchForBarsNearby
