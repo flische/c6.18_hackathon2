@@ -44,13 +44,14 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $('.details').on('click',  pageTransition2);
+    $('.details').on('click', pageTransition2);
     $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
     $('.google-maps').click(pageTransition4);
     $('#bar').click(gotoMap);
     $('#restaurant').click(gotoMap);
     $('#lodging').click(gotoMap);
+    $('.back-to-map').click(gotoMap);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -66,7 +67,7 @@ function handleSearchClick() {
     var genre = genreInput.val();
     var city = $('#city').val();
     getVenueData(city, genre);
-    
+
 
 }
 
@@ -96,7 +97,7 @@ function getVenueData(city, genre) {
                 venueSearchResults[venueI] = result._embedded.events[venueI];
             }
             page2DomCreation(venueSearchResults);
-    		pageTransition();
+            pageTransition();
         },
         error: function (err) {
             console.log(err);
@@ -207,7 +208,7 @@ function page2DomCreation(venueSearchResults) {
             var temp = createLightElement(venueSearchResults[resultIndex], resultIndex)
             $('.events-body').append(temp);
         } else {
-        	var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
+            var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
             $('.events-body').append(temp);
         }
     }
@@ -259,13 +260,14 @@ function pageTransition4() {
 function gotoMap() {
     $('.google-maps').removeClass('hidden');
     $('.concert-details').addClass('hidden');
+    $('.yelp').addClass('hidden');
 
 }
 
-function handleDetailsClick(){
-	var detailsIndex = $(this).attr('arrayindex');
-	handlePage3Details(venueSearchResults[detailsIndex]);
-	pageTransition2();
+function handleDetailsClick() {
+    var detailsIndex = $(this).attr('arrayindex');
+    handlePage3Details(venueSearchResults[detailsIndex]);
+    pageTransition2();
 }
 
 
