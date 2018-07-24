@@ -48,7 +48,7 @@ header {
 /* ******************LANDING PAGE STYLING************************ */
 
 .banner {
-    display: none;
+    /*display: none;*/
 }
 
 .banner>img {
@@ -58,7 +58,7 @@ header {
 
 .inputs {
     text-align: center;
-    display: none;
+    /*display: none;*/
 }
 
 input {
@@ -108,6 +108,7 @@ input {
     width: 100%;
     height: 100%;
     padding-top: 2%;
+    display:none;
 }
 
 .event-header {
