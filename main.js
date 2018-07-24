@@ -24,7 +24,7 @@ var longitude = -117.83;
 
 */
 var venueSearchResults = [];
-
+var buyTicketsUrl;
 /***************************************************************************************************
  * initializeApp
  * @params {undefined} none
@@ -51,6 +51,7 @@ function addClickHandlers() {
     $('#bar').click(gotoMap);
     $('#restaurant').click(gotoMap);
     $('#lodging').click(gotoMap);
+    $('#tickets').click(buyTicketsLink);
 }
 /*************************************************************************************************
 * handleSearchClick()
@@ -270,6 +271,8 @@ function handleDetailsClick(){
 //passing in the index into this function
 function handlePage3Details(singleEvent) {
     //changing the span text to match the details for the event being generated
+    buyTicketsUrl = singleEvent.url;
+    console.log(buyTicketsUrl)
     var artistPicture = singleEvent.images[3].url;
     $('.pageThreeArtistImg').attr('src', artistPicture);
     $('.pageThreeNameSpan').text(singleEvent.name);
@@ -277,6 +280,11 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+}
+
+function buyTicketsLink(){
+	var win = window.open(buyTicketsUrl, '_blank');
+  	win.focus();
 }
 /*************************************************************************************************
 * searchForBarsNearby
