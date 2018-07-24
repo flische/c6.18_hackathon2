@@ -76,7 +76,7 @@ function getVenueData(city, genre){
     custUrl+= '&city='+ city;
   }
   if (genre){
-    custUrl+= '&keyword=' + genre;
+    custUrl+= '&classificationName=' + genre;
   }
     var ajaxConfig = {
         url: custUrl,
