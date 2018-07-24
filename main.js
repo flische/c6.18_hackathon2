@@ -1,8 +1,12 @@
-/**
- * Listen for the document to load and initialize the application
+
+var venueSearchResults = [];
+
+
+ /* Listen for the document to load and initialize the application
  * @param {function} initializeApp -
  */
 $(document).ready(initializeApp);
+
 
 /**
  * Define all global variables here (below).
@@ -48,6 +52,35 @@ function handleSearchClick(){
 * @returns runs ticketmaster ajax call and stores result into global array
 * will need to decide data stored ie what details
 */
+
+
+function getVenueData(city, genre){
+  var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
+  if (city){
+    custUrl+= '&city='+ city;
+  }
+  if (genre){
+    custUrl+= '&keyword=' + genre;
+  }
+    var ajaxConfig = {
+        url: custUrl,
+        success: function(result) {
+             for(var venueI = 0; venueI < result._embedded.events.length; venueI++){
+				venueSearchResults[venueI] = result._embedded.events[venueI];
+			}
+      	},
+        error: console.log('error')
+    }
+    $.ajax(ajaxConfig);
+}
+getVenueData('irvine', 'rock'); //function run for testing purposes
+
+
+/* page2DomCreation function
+*using search results stored in global will create divs with various info onto the page
+*will create a link on each dom element, possible store index number into dom element to be referenced later
+*dom element link will call handlePage3Details function with dom index as param, then call hideShowPage function
+
 function getEvents(){
 }
 
