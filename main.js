@@ -155,6 +155,8 @@ function page2DomCreation(venueSearchResults) {
         leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
         centerEventDiv.append(eachEventDate, eachEventTime);
         eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
+        return eachEventDetailBody;
+
     }
 
     function createDarkElement(eventDetails) {
@@ -191,6 +193,7 @@ function page2DomCreation(venueSearchResults) {
         leftEventDiv.append(eachArtistName, eachVenueName, eachVenueCity);
         centerEventDiv.append(eachEventDate, eachEventTime);
         eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
+        return eachEventDetailBody;
     }
     //loops through and creates each individual element and appends to the DOM
     for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
