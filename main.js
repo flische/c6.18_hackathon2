@@ -44,6 +44,7 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
+    $('.reset-2').click(startOver);
     $(".events-body").on("click", ".details", handleDetailsClick);
     $('.results').click(function () {
         transitionPages('page3', 'page2');
@@ -486,7 +487,7 @@ function goToYelp(name, address1, city) {
 
 function getYelpBusinessID(name, address1, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
-  
+
 
     var ajaxConfig = {
         url: customURL,
@@ -501,13 +502,13 @@ function getYelpBusinessID(name, address1, city) {
             country: "US"
         },
         success: function (response) {
-            if(response.businesses[0]){
-	            var businessID = response.businesses[0].id;
-	            console.log(response);
-	            getYelpBusinessDetails(businessID);
-	          }  else{
-	          	window.alert('Business listing not found, try again!')
-	          }
+            if (response.businesses[0]) {
+                var businessID = response.businesses[0].id;
+                console.log(response);
+                getYelpBusinessDetails(businessID);
+            } else {
+                window.alert('Business listing not found, try again!')
+            }
         },
         error: function () {
             console.log('error');
@@ -546,25 +547,25 @@ function renderYelpDetails(details) {
     $('.place-name').text(details.name);
     console.log(details.rating);
     var starObject = {
-        0 : 'images/0.png',
-        0.5 : 'images/0_5.png',
-        1 : 'images/1.png',
-        1.5 : 'images/1_5.png',
-        2 : 'images/2.png',
-        2.5 : 'images/2_5.png',
-        3 : 'images/3.png',
-        3.5 : 'images/3_5.png',
-        4 : 'images/4.png',
-        4.5 : 'images/4_5.png',
-        5 : 'images/5.png',
+        0: 'images/0.png',
+        0.5: 'images/0_5.png',
+        1: 'images/1.png',
+        1.5: 'images/1_5.png',
+        2: 'images/2.png',
+        2.5: 'images/2_5.png',
+        3: 'images/3.png',
+        3.5: 'images/3_5.png',
+        4: 'images/4.png',
+        4.5: 'images/4_5.png',
+        5: 'images/5.png',
     };
 
-    function starRatingImageChanger(starObject, rating){
+    function starRatingImageChanger(starObject, rating) {
         var temp = starObject[rating];
         $('#stars').attr('src', temp);
-    } ;
+    };
     var starRating = details.rating;
-    starRatingImageChanger(starObject,starRating);
+    starRatingImageChanger(starObject, starRating);
 
     $('.price-rating').text(details.price);
     var image1 = details.photos[0];
@@ -574,8 +575,8 @@ function renderYelpDetails(details) {
     var image3 = details.photos[2];
     $('#yelpImage3').attr('src', image3);
     $('.business-phone').text('Phone: ' + details.display_phone);
-    $('.business-hours').text(function(){
-        if(details.hours[0].is_open_now){
+    $('.business-hours').text(function () {
+        if (details.hours[0].is_open_now) {
             return "Open now";
         }
         else {
