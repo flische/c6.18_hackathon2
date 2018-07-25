@@ -105,8 +105,10 @@ function getVenueData(city, genre) {
                 venueSearchResults[venueI] = result._embedded.events[venueI];
 
             }
+            $('#city').val('');
             page2DomCreation(venueSearchResults);
             pageTransition();
+
         },
         error: function (err) {
             console.log(err);
