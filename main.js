@@ -483,13 +483,6 @@ function goToYelp(name, address1, city) {
 */
 
 
-function getYelpBusinessID(name, address, city) {
-    var customURL = "https://yelp.ongandy.com/businesses/matches";
-
-    var ajaxConfig = {};
-
-}
-
 function getYelpBusinessID(name, address1, city) {
      var customURL = "https://yelp.ongandy.com/businesses/matches";
      if(name) {
@@ -526,7 +519,7 @@ function getYelpBusinessID(name, address1, city) {
         data: {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             name: name,
-            address1: address,
+            address1: address1,
             city: city,
             state: "CA",
             country: "US"
@@ -571,16 +564,60 @@ function getYelpBusinessDetails(id) {
 
 function renderYelpDetails(details) {
     $('.place-name').text(details.name);
-    $('.star-rating').text(details.rating);
-    // $('.price-rating').text(details.price);
+    console.log(details.rating);
+    switch(details.rating){
+        case 0:
+            $('.star-rating').text('hi');
+            //$('#stars').attr('src', '0.jpg');
+            break;
+        case 0.5:
+            //$('#stars').attr('src', '0.5.jpg');
+            break;
+        case 1:
+            //$('#stars').attr('src', '1.jpg');
+            break;
+        case 1.5:
+            //$('#stars').attr('src', '1_5.jpg');
+            break;
+        case 2:
+            //$('#stars').attr('src', '2.jpg');
+            break;
+        case 2.5:
+            //$('#stars').attr('src', '2_5.jpg');
+            break;
+        case 3:
+            $('.star-rating').text('333333333333');
+            //$('#stars').attr('src', '3.jpg');
+            break;
+        case 3.5:
+            $('.star-rating').text('uhhh');
+
+            //$('#stars').attr('src', '3_5.jpg');
+            break;
+        case 4:
+            $('.star-rating').text('gross');
+
+            //$('#stars').attr('src', '4.jpg');
+            break;
+        case 4.5:
+            $('.star-rating').text('asdasdasd');
+
+            //$('#stars').attr('src', '4_5.jpg');
+            break;
+        case 5:
+            //$('#stars').attr('src', '5.jpg');
+            break;
+    }
+    //$('.star-rating').text(details.rating);
+    $('.price-rating').text(details.price);
     var image1 = details.photos[0];
     $('#yelpImage1').attr('src', image1);
     var image2 = details.photos[1];
     $('#yelpImage2').attr('src', image2);
     var image3 = details.photos[2];
     $('#yelpImage3').attr('src', image3);
-    // $('.business-phone').text(details.display_phone);
-    // $('.business-hours').text(details.hours[0].is_open_now);
+    $('.business-phone').text(details.display_phone);
+    $('.business-hours').text(details.hours[0].is_open_now);
     $('.business-address').text(details.display_address);
     $('#yelpURL').attr('href', details.url);
     transitionPages('page4', 'page5');
