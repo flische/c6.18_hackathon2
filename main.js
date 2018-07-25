@@ -527,7 +527,7 @@ function getYelpBusinessID(name, address1, city) {
         data: {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             name: name,
-            address1: address,
+            address1: address1,
             city: city,
             state: "CA",
             country: "US"
