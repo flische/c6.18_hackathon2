@@ -222,31 +222,31 @@ function page2DomCreation(venueSearchResults) {
     }
 }
 
-function convertMilitaryTime(milTime){
-	if(!milTime){
-		return;
-	}
-	var time = milTime; 
-	time = time.split(':'); 
-	var hours = Number(time[0]);
-	var minutes = Number(time[1]);
-	var seconds = Number(time[2]);
-	var timeValue;
-	if (hours > 0 && hours <= 12) {
-	  timeValue= "" + hours;
-	} else if (hours > 12) {
-	  timeValue= "" + (hours - 12);
-	} else if (hours == 0) {
-	  timeValue= "12";
-	}
-	timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes; 
-	timeValue += (hours >= 12) ? " P.M." : " A.M.";
-	return timeValue;
+function convertMilitaryTime(milTime) {
+    if (!milTime) {
+        return;
+    }
+    var time = milTime;
+    time = time.split(':');
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+    var seconds = Number(time[2]);
+    var timeValue;
+    if (hours > 0 && hours <= 12) {
+        timeValue = "" + hours;
+    } else if (hours > 12) {
+        timeValue = "" + (hours - 12);
+    } else if (hours == 0) {
+        timeValue = "12";
+    }
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;
+    timeValue += (hours >= 12) ? " P.M." : " A.M.";
+    return timeValue;
 }
-function convertDateFormat(yyddmm){
-	var newDate = yyddmm.split('-');
-	var returnDate = (newDate[1]) + '-' + newDate[2] + '-' + newDate[0];
-	return returnDate;
+function convertDateFormat(yyddmm) {
+    var newDate = yyddmm.split('-');
+    var returnDate = (newDate[1]) + '-' + newDate[2] + '-' + newDate[0];
+    return returnDate;
 }
 
 
@@ -378,7 +378,7 @@ function initializeMap(type) {
     //creates instance of map
     map = new google.maps.Map(document.getElementById('map'), {
         center: location,
-        zoom: 15
+        zoom: 13
     });
     //request contains the radius around given location and the type of facility we are targeting
     var request = {
@@ -417,7 +417,7 @@ function createMarker(place) {
     var marker = new google.maps.Marker({
         map: map,
         icon: image,
-        position: place.geometry.location
+        position: placeLoc
     });
 
     var request = {
@@ -429,6 +429,7 @@ function createMarker(place) {
     });
 
     google.maps.event.addListener(marker, 'click', function () {
+
         service.getDetails(request, function (place, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 var contentStr = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
@@ -452,7 +453,7 @@ function createMarker(place) {
             var city = addressStringArray[1];
 
             $('.yelp-transition').click(gotoYelp)
-                       
+
         });
     });
 }
