@@ -97,16 +97,16 @@ function getVenueData(city, genre) {
     var ajaxConfig = {
         url: custUrl,
         success: function (result) {
-            if(result.page.totalElements>0){
-	            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
-	                venueSearchResults[venueI] = result._embedded.events[venueI];
-	            }
-	            $('#city').val('');
-            	page2DomCreation(venueSearchResults);
-            	transitionPages('page1', 'page2');
-	        } else {
-	        	showErrorModal();
-	        }     
+            if (result.page.totalElements > 0) {
+                for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
+                    venueSearchResults[venueI] = result._embedded.events[venueI];
+                }
+                $('#city').val('');
+                page2DomCreation(venueSearchResults);
+                transitionPages('page1', 'page2');
+            } else {
+                showErrorModal();
+            }
         },
         error: function (err) {
             console.log(err);
@@ -456,7 +456,7 @@ function createMarker(place) {
             var addressStringArray = place.formatted_address.split(",");
             var address1 = addressStringArray[0];
             var city = addressStringArray[1];
-            $('.yelp-transition').click(function(){
+            $('.yelp-transition').click(function () {
                 goToYelp(name, address1, city);
             });
 
@@ -492,42 +492,42 @@ function getYelpBusinessID(name, address, city) {
 }
 
 function getYelpBusinessID(name, address1, city) {
-     var customURL = "https://yelp.ongandy.com/businesses/matches";
-     if(name) {
-         customURL+= "?name=" + name;
-     }
-     if(address1) {
-         customURL+= "&address1=" + address1;
-     }
-     if(city) {
-         customURL+= "&city=" + city + "&state=CA&country=US";
-     }
-     console.log('here is our custom URL', customURL);
+    var customURL = "https://yelp.ongandy.com/businesses/matches";
+    if (name) {
+        customURL += "?name=" + name;
+    }
+    if (address1) {
+        customURL += "&address1=" + address1;
+    }
+    if (city) {
+        customURL += "&city=" + city + "&state=CA&country=US";
+    }
+    console.log('here is our custom URL', customURL);
 
-     var ajaxConfig = {
-         "url": customURL,
-         "method": "POST",
-         "dataType": "JSON",
-         "data": {
-             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
-         },
-         success: function (response) {
-             var businessID = response.businesses[0].id;
-             console.log(response);
-             getYelpBusinessDetails(businessID);
-         },
-         error: function (err) {
-             console.log(err);
-         }
-     }
-     var ajaxConfig = {
+    var ajaxConfig = {
+        "url": customURL,
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+        },
+        success: function (response) {
+            var businessID = response.businesses[0].id;
+            console.log(response);
+            getYelpBusinessDetails(businessID);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    }
+    var ajaxConfig = {
         url: customURL,
         method: "POST",
         dataType: "JSON",
         data: {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             name: name,
-            address1: address,
+            address1: address1,
             city: city,
             state: "CA",
             country: "US"
