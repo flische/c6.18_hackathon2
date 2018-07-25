@@ -9,8 +9,8 @@ venueSearchResults = [];
 */
 var map;
 var service;
-var latitude = 33.69;
-var longitude = -117.83;
+/*var latitude = 33.69;
+var longitude = -117.83;*/
 /*initialize app function
 *call addClickHandlers function
 *no params or returns
@@ -282,7 +282,8 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
-
+    var longitude = singleEvent._embedded.venues[0].location.longitude;
+    var latitutde = singleEvent._embedded.venues[0].location.latitude;
 }
 
 function buyTicketsLink(){
