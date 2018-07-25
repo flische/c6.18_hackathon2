@@ -572,6 +572,19 @@ function startOver() {
     venueSearchResults = [];
 }
 
+
+window.onclick = function (event) {
+    var modal = document.getElementById("errorModal");
+
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+function showErrorModal() {
+    $('.shadow1').css('display', 'inline-block');
+}
 /*************************************************************************************************
 * note-back button links/clickhandlers have not been described here yet, but should not be hard to implement
 */
