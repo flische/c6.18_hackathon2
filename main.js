@@ -105,7 +105,7 @@ function getVenueData(city, genre) {
             	page2DomCreation(venueSearchResults);
             	transitionPages('page1', 'page2');
 	        } else {
-	        	window.alert('No Results found, try a different city!')
+	        	showErrorModal();
 	        }     
         },
         error: function (err) {
