@@ -438,11 +438,11 @@ function createMarker(place) {
                 infowindow.setContent(contentStr);
                 infowindow.open(map, marker);
             }
-            const name = place.name;
-            const addressStringArray = place.formatted_address.split(",");
+            var name = place.name;
+            var addressStringArray = place.formatted_address.split(",");
             console.log(addressStringArray);
-            const address1 = addressStringArray[0];
-            const city = addressStringArray[1];
+            var address1 = addressStringArray[0];
+            var city = addressStringArray[1];
             getYelpBusinessID(name, address1, city);
         });
     });
@@ -456,38 +456,31 @@ function createMarker(place) {
 */
 
 
-function getYelpBusinessID(name, address1, city) {
+function getYelpBusinessID(name, address, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
-    if (name) {
-        customURL += "?name=" + name;
-    }
-    if (address1) {
-        customURL += "&address1=" + address1;
-    }
-    if (city) {
-        customURL += "&city=" + city + "&state=CA&country=US";
-    }
-    console.log('here is our custom URL', customURL);
 
     var ajaxConfig = {
-        "url": customURL,
-        "method": "POST",
-        "dataType": "JSON",
-        "data": {
-            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+        url: customURL,
+        method: "POST",
+        dataType: "JSON",
+        data: {
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
+            name: name,
+            address1: address,
+            city: city,
+            state: "CA",
+            country: "US"
         },
         success: function (response) {
             var businessID = response.businesses[0].id;
             console.log(response);
             getYelpBusinessDetails(businessID);
         },
-        error: function (err) {
-            console.log(err);
+        error: function () {
+            console.log('error');
         }
     };
-    $.ajax(ajaxConfig).done(function (response) {
-        console.log(response);
-    });
+    $.ajax(ajaxConfig);
 }
 
 /*************************************************************
@@ -501,18 +494,18 @@ function getYelpBusinessID(name, address1, city) {
 function getYelpBusinessDetails(id) {
     var detailsURL = "https://yelp.ongandy.com/businesses/details";
     var ajaxConfig = {
-        "url": detailsURL,
-        "method": "POST",
-        "dataType": "JSON",
-        "data": {
+        url: detailsURL,
+        method: "POST",
+        dataType: "JSON",
+        data: {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             id: id
         },
         success: function (response) {
             console.log("details", response);
         },
-        error: function (err) {
-            console.log(err);
+        error: function () {
+            console.log("error");
         }
     };
     $.ajax(ajaxConfig);
