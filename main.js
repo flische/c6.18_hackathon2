@@ -45,21 +45,21 @@ function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
     $(".events-body").on("click", ".details", handleDetailsClick)
-    $('.results').click(function(){
-    	transitionPages('page3', 'page2')
+    $('.results').click(function () {
+        transitionPages('page3', 'page2')
     });
     $('.back-to-map').click(gotoMap);
 
     $('#tickets').click(buyTicketsLink);
-    $('.back-to-details').click(function(){
-    	transitionPages('page4', 'page3');
+    $('.back-to-details').click(function () {
+        transitionPages('page4', 'page3');
     });
     $('#bar').click(callBars);
     $('#restaurant').click(callRestaurant);
     $('#lodging').click(callHotels);
 
-
 }
+
 
 /*************************************************************************************************
 * handleSearchClick()
@@ -238,20 +238,12 @@ function transitionPages(pageToHide, pageToShow) {
     $(pageClasses[pageToHide]).addClass('hidden');
     $(pageClasses[pageToShow]).removeClass('hidden');
 }
-/*************************************************************************************************
-* handlePage3Details
-* @params index of page 2 dom element clicked to reference global array
-* this function will pull details from global arrya and fill them onto page 3 template, artist name, venue, dates, image etc
-* variables for lat and long are stored to be passed later
-* this page will have 2 links for searchForBarsNearby and searchForRestuarantsNearby function with lat and long as params
-*/
+
 
 /************************************************************************************************** 
- * pageTransition
- * hides and shows divs as needed
+ * gotoMap
+ * hides and shows map as needed
 */
-
-
 function gotoMap() {
     $('.google-maps').removeClass('hidden');
     $('.concert-details').addClass('hidden');
@@ -264,6 +256,13 @@ function handleDetailsClick() {
     handlePage3Details(venueSearchResults[detailsIndex]);
 }
 
+/*************************************************************************************************
+* handlePage3Details
+* @params index of page 2 dom element clicked to reference global array
+* this function will pull details from global arrya and fill them onto page 3 template, artist name, venue, dates, image etc
+* variables for lat and long are stored to be passed later
+* this page will have 2 links for searchForBarsNearby and searchForRestuarantsNearby function with lat and long as params
+*/
 //passing in the index into this function
 function handlePage3Details(singleEvent) {
     //changing the span text to match the details for the event being generated
@@ -281,47 +280,50 @@ function handlePage3Details(singleEvent) {
     longitude = singleEvent._embedded.venues[0].location.longitude;
     console.log('before map: ', latitude, longitude);
     transitionPages('page2', 'page3');
-
-
 }
-
+/**********************************************************
+ * callBars
+ * @params none
+ * calls initializeMap and passes in parameter we want to search for
+ * calls gotoMap
+ */
 function callBars() {
     initializeMap('bar');
     gotoMap();
 }
 
+/**********************************************************
+ * callRestaurant
+ * @params none
+ * calls initializeMap and passes in parameter we want to search for
+ * calls gotoMap
+ */
+
 function callRestaurant() {
     initializeMap('restaurant');
     gotoMap();
 }
+
+/**********************************************************
+ * callHotels
+ * @params none
+ * calls initializeMap and passes in parameter we want to search for
+ * calls gotoMap
+ */
 function callHotels() {
     initializeMap('lodging');
     gotoMap();
 }
 
+/**********************************************************
+ * buyTicketsLink
+ * @params none
+ * opens link to purchase tickets from ticketmaster
+  */
+
 function buyTicketsLink() {
     var win = window.open(buyTicketsUrl, '_blank');
     win.focus();
-}
-/*************************************************************************************************
-* searchForBarsNearby
-* @params lat and long
-* @calls hideShowPage function hide page3 show page 4
-* @calls run google ajax call and populate data onto page4
-* create links on the dropped markers near venue to viewYelpInfo with param of business selected
-*/
-function searchForBarsNearby() {
-
-}
-
-/*************************************************************************************************
-* searchForRestaurantsNearby
-* @params lat and long
-* @calls hideShowPage function hide page3 show page 4
-* @calls run google ajax call and populate data onto page4
-* create links on the dropped markers near venue to viewYelpInfo with param of business selected
-*/
-function searchForRestaurantsNearby() {
 }
 
 /*************************************************************************************************
@@ -405,6 +407,7 @@ function createMarker(place) {
                 if (!!place.website) contentStr += '<br><a target="_blank" href="' + place.website +
                     '">' + place.website + '</a>';
                 contentStr += '<br>' + '</p>';
+                contentStr += '<p><a class="yelp-transition">Get YELP details</a></p>';
                 infowindow.setContent(contentStr);
                 infowindow.open(map, marker);
                 console.log('place:', place);
@@ -419,9 +422,16 @@ function createMarker(place) {
             console.log(addressStringArray);
             const address1 = addressStringArray[0];
             const city = addressStringArray[1];
+
+            $('.yelp-transition').click(gotoYelp);
             getYelpBusinessID(name, address1, city);
         });
     });
+}
+
+function gotoYelp(name, address1, city) {
+    getYelpBusinessID(name, address1, city);
+    transitionPages('page4', 'page5');
 }
 
 /*************************************************************
