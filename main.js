@@ -157,7 +157,7 @@ function page2DomCreation(venueSearchResults) {
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
         var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
-        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
         var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
@@ -196,7 +196,7 @@ function page2DomCreation(venueSearchResults) {
         eachEventDate.append(dateObject);
 
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
