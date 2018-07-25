@@ -565,7 +565,28 @@ function getYelpBusinessDetails(id) {
 function renderYelpDetails(details) {
     $('.place-name').text(details.name);
     console.log(details.rating);
-    switch(details.rating){
+
+    var starObject = {
+        0 : '0.jpg',
+        0.5 : '0_5.jpg',
+        1 : '1.jpg',
+        1.5 : '1_5.jpg',
+        2 : '2.jpg',
+        2.5 : '2_5.jpg',
+        3 : '3.jpg',
+        3.5 : '3.5.jpg',
+        4 : '4.jpg',
+        4.5 : '4.5.jpg',
+        5 : '5.jpg',
+    }
+
+    function starRatingImageChanger(starObject, rating){
+        var temp = starObject[rating];
+        $('#stars').attr('src', temp);
+    } ;
+
+    starRatingImageChanger(starObject,details.rating)
+    /*switch(details.rating){
         case 0:
             $('.star-rating').text('hi');
             //$('#stars').attr('src', '0.jpg');
@@ -607,7 +628,7 @@ function renderYelpDetails(details) {
         case 5:
             //$('#stars').attr('src', '5.jpg');
             break;
-    }
+    }*/
     //$('.star-rating').text(details.rating);
     $('.price-rating').text(details.price);
     var image1 = details.photos[0];
