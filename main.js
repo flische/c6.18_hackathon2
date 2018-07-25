@@ -155,9 +155,9 @@ function page2DomCreation(venueSearchResults) {
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
         var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
         eachEventDate.append(dateObject);
-
+        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
+        var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
@@ -194,7 +194,8 @@ function page2DomCreation(venueSearchResults) {
         eachEventDate.append(dateObject);
 
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
+        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
@@ -218,6 +219,29 @@ function page2DomCreation(venueSearchResults) {
         }
     }
 }
+
+function convertMilitaryTime(milTime){
+	if(!milTime){
+		return;
+	}
+	var time = milTime; 
+	time = time.split(':'); 
+	var hours = Number(time[0]);
+	var minutes = Number(time[1]);
+	var seconds = Number(time[2]);
+	var timeValue;
+	if (hours > 0 && hours <= 12) {
+	  timeValue= "" + hours;
+	} else if (hours > 12) {
+	  timeValue= "" + (hours - 12);
+	} else if (hours == 0) {
+	  timeValue= "12";
+	}
+	timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes; 
+	timeValue += (hours >= 12) ? " P.M." : " A.M.";
+	return timeValue;
+}
+
 
 /*************************************************************************************************
 * showHidePage function
