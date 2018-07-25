@@ -44,24 +44,20 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $('.details').on('click', pageTransition2);
     $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
     // $('.google-maps').click(pageTransition4);
     $('.back-to-map').click(gotoMap);
 
     $('#tickets').click(buyTicketsLink);
-    $('#bar').click(gotoMap);
-    $('#restaurant').click(gotoMap);
-    $('#lodging').click(gotoMap);
 
     $('#bar').click(callBars);
     $('#restaurant').click(callRestaurant);
     $('#lodging').click(callHotels);
 
 
-
 }
+
 /*************************************************************************************************
 * handleSearchClick()
 * store zipcode and genre in local variables
@@ -111,7 +107,7 @@ function getVenueData(city, genre) {
         error: function (err) {
             console.log(err);
         }
-    }
+    };
     $.ajax(ajaxConfig);
 }
 
@@ -228,7 +224,20 @@ function page2DomCreation(venueSearchResults) {
 * @params which page to show, which page to hide
 * will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
 */
-function showHidePage() {
+var pageClasses = {
+	'page1': '.home',
+	'page2': '.event-results',
+	'page3': '.concert-details',
+	'page4': '.google-maps',
+	'page5': '.yelp'
+}
+
+function transitionPages(pageToHide, pageToShow) {
+	// var hide = pageClasses[pageToHide];
+	// var show = pageClasses[pageToShow];
+	// console.log(hide, show)
+	$(pageClasses[pageToHide]).addClass('hidden');
+	$(pageClasses[pageToShow]).removeClass('hidden');
 }
 /*************************************************************************************************
 * handlePage3Details
@@ -282,6 +291,8 @@ function handleDetailsClick() {
 //passing in the index into this function
 function handlePage3Details(singleEvent) {
     //changing the span text to match the details for the event being generated
+
+    //add click handler first
     buyTicketsUrl = singleEvent.url;
     console.log(buyTicketsUrl)
     var artistPicture = singleEvent.images[3].url;
@@ -291,12 +302,6 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
-
-    latitude = singleEvent._embedded.venues[0].location.latitude;
-    longitude = singleEvent._embedded.venues[0].location.longitude;
-    console.log('before map: ', latitude, longitude);
-
-
 }
 
 function callBars() {
@@ -308,6 +313,9 @@ function callRestaurant() {
 }
 function callHotels() {
     initializeMap('lodging');
+    var longitude1 = singleEvent._embedded.venues[0].location.longitude;
+    var latitutde1 = singleEvent._embedded.venues[0].location.latitude;
+    console.log(latitutde1,longitude1);
 }
 
 function buyTicketsLink() {
@@ -422,18 +430,15 @@ function createMarker(place) {
             }
         });
     });
-
-    var name = place.name;
-    var address = place.formatted_address;
 }
 
-
-/*viewYelpInfo function
-*params businessSelected
-*run yelp api, store results and populate data onto page5 template
-*showHidePage function hide page 4 show page 5
-*button on page to run startOver function
+/*************************************************************
+* getYelpBusinessID function
+* @params {string} name, {string} address1, {string} city
+* run Andy's yelp api (using his proxy server to access Yelp API) to GET business id via business match endpoint
+* @calls (on success) the getYelpBusinessDetails function
 */
+
 function getYelpInfo(name, address1, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
     if (name) {
@@ -448,14 +453,36 @@ function getYelpInfo(name, address1, city) {
     console.log('here is our custom URL', customURL);
 
     var ajaxConfig = {
+
+function getYelpBusinessID(name, address1, city) {
+     var customURL = "https://yelp.ongandy.com/businesses/matches";
+     if(name) {
+         customURL+= "?name=" + name;
+     }
+     if(address1) {
+         customURL+= "&address1=" + address1;
+     }
+     if(city) {
+         customURL+= "&city=" + city + "&state=CA&country=US";
+     }
+     console.log('here is our custom URL', customURL);
+
+     var ajaxConfig = {
+
         "url": customURL,
         "method": "POST",
         "dataType": "JSON",
         "data": {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
         },
+
         success: function (response) {
+
+        success: function(response) {
+            var businessID = response.businesses[0].id;
+
             console.log(response);
+            getYelpBusinessDetails(businessID);
         },
         error: function (err) {
             console.log(err);
@@ -465,17 +492,43 @@ function getYelpInfo(name, address1, city) {
         console.log(response);
     });
 }
-getYelpInfo('The Oyster Bar SKC', '2626 E Katella Ave', 'Anaheim');
 
+/*************************************************************
+ * getYelpBusinessDetails function
+ * @params {string} id - variable businessID from getYelpBusinessID response
+ * run Andy's yelp api (using his proxy server to access the Yelp business details via their '/business/{id}' endpoint
+ * showHidePage function hide page 4 show page 5
+ * button on page to run startOver function
+ */
+
+function getYelpBusinessDetails(id) {
+    var detailsURL =  "https://yelp.ongandy.com/businesses/details";
+    var ajaxConfig = {
+        "url": detailsURL,
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
+            id: id
+        },
+        success: function (response) {
+            console.log("details", response);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    };
+    $.ajax(ajaxConfig);
+}
 
 /*************************************************************************************************
 * startOver function
 
 * basically reset button, go back to page one and empty array
+* hide all
 */
 function startOver() {
-    $('.event-results').addClass('hidden');
-    $('.concert-details').addClass('hidden');
+    $('.event-results, .concert-details, .google-maps, .yelp').addClass('hidden');
     $('.home').removeClass('hidden');
 }
 
