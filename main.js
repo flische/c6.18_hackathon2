@@ -302,6 +302,8 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+    longitude = singleEvent._embedded.venues[0].location.longitude;
+    latitude = singleEvent._embedded.venues[0].location.latitude;
 }
 
 function callBars() {
@@ -313,9 +315,6 @@ function callRestaurant() {
 }
 function callHotels() {
     initializeMap('lodging');
-    var longitude1 = singleEvent._embedded.venues[0].location.longitude;
-    var latitutde1 = singleEvent._embedded.venues[0].location.latitude;
-    console.log(latitutde1,longitude1);
 }
 
 function buyTicketsLink() {
@@ -359,7 +358,6 @@ function viewYelpInfo() {
 */
 
 function initializeMap(type) {
-    console.log(longitude, latitude);
 
     //defines location we are targeting on the map
     var location = new google.maps.LatLng(latitude, longitude);
@@ -476,25 +474,20 @@ function getYelpBusinessID(name, address1, city) {
      console.log('here is our custom URL', customURL);
 
      var ajaxConfig = {
-
-        "url": customURL,
-        "method": "POST",
-        "dataType": "JSON",
-        "data": {
-            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
-        },
-
-        success: function (response) {
-
+         "url": customURL,
+         "method": "POST",
+         "dataType": "JSON",
+         "data": {
+             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+         },
         success: function(response) {
-            var businessID = response.businesses[0].id;
-
-            console.log(response);
-            getYelpBusinessDetails(businessID);
-        },
-        error: function (err) {
-            console.log(err);
-        }
+             var businessID = response.businesses[0].id;
+             console.log(response);
+             getYelpBusinessDetails(businessID);
+             },
+         error: function(err) {
+             console.log(err);
+         }
     };
     $.ajax(ajaxConfig).done(function (response) {
         console.log(response);
