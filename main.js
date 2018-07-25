@@ -157,7 +157,7 @@ function page2DomCreation(venueSearchResults) {
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
         var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
-        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
         var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
@@ -196,7 +196,7 @@ function page2DomCreation(venueSearchResults) {
         eachEventDate.append(dateObject);
 
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
@@ -305,10 +305,13 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeDateSpan').text(convertDateFormat(singleEvent.dates.start.localDate));
     $('.pageThreeTimeSpan').text(convertMilitaryTime(singleEvent.dates.start.localTime));
 
-    latitude = singleEvent._embedded.venues[0].location.latitude;
     longitude = singleEvent._embedded.venues[0].location.longitude;
+
+    latitude = singleEvent._embedded.venues[0].location.latitude;
+
     console.log('before map: ', latitude, longitude);
     transitionPages('page2', 'page3');
+
 }
 /**********************************************************
  * callBars
@@ -344,6 +347,7 @@ function callHotels() {
     gotoMap();
 }
 
+
 /**********************************************************
  * buyTicketsLink
  * @params none
@@ -371,7 +375,6 @@ function viewYelpInfo() {
 */
 
 function initializeMap(type) {
-    console.log(longitude, latitude);
 
     //defines location we are targeting on the map
     var location = new google.maps.LatLng(latitude, longitude);
@@ -473,7 +476,40 @@ function gotoYelp(name, address1, city) {
 function getYelpBusinessID(name, address, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
 
-    var ajaxConfig = {
+    var ajaxConfig = {};
+
+}
+
+function getYelpBusinessID(name, address1, city) {
+     var customURL = "https://yelp.ongandy.com/businesses/matches";
+     if(name) {
+         customURL+= "?name=" + name;
+     }
+     if(address1) {
+         customURL+= "&address1=" + address1;
+     }
+     if(city) {
+         customURL+= "&city=" + city + "&state=CA&country=US";
+     }
+     console.log('here is our custom URL', customURL);
+
+     var ajaxConfig = {
+         "url": customURL,
+         "method": "POST",
+         "dataType": "JSON",
+         "data": {
+             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+         },
+         success: function (response) {
+             var businessID = response.businesses[0].id;
+             console.log(response);
+             getYelpBusinessDetails(businessID);
+         },
+         error: function (err) {
+             console.log(err);
+         }
+     }
+     var ajaxConfig = {
         url: customURL,
         method: "POST",
         dataType: "JSON",
