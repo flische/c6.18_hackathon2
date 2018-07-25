@@ -486,33 +486,8 @@ function goToYelp(name, address1, city) {
 
 function getYelpBusinessID(name, address1, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
-    if (name) {
-        customURL += "?name=" + name;
-    }
-    if (address1) {
-        customURL += "&address1=" + address1;
-    }
-    if (city) {
-        customURL += "&city=" + city + "&state=CA&country=US";
-    }
-    console.log('here is our custom URL', customURL);
+  
 
-    var ajaxConfig = {
-        "url": customURL,
-        "method": "POST",
-        "dataType": "JSON",
-        "data": {
-            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
-        },
-        success: function (response) {
-            var businessID = response.businesses[0].id;
-            console.log(response);
-            getYelpBusinessDetails(businessID);
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    }
     var ajaxConfig = {
         url: customURL,
         method: "POST",
@@ -526,9 +501,13 @@ function getYelpBusinessID(name, address1, city) {
             country: "US"
         },
         success: function (response) {
-            var businessID = response.businesses[0].id;
-            console.log(response);
-            getYelpBusinessDetails(businessID);
+            if(response.businesses[0]){
+	            var businessID = response.businesses[0].id;
+	            console.log(response);
+	            getYelpBusinessDetails(businessID);
+	          }  else{
+	          	window.alert('Business listing not found, try again!')
+	          }
         },
         error: function () {
             console.log('error');
@@ -566,7 +545,6 @@ function getYelpBusinessDetails(id) {
 function renderYelpDetails(details) {
     $('.place-name').text(details.name);
     console.log(details.rating);
-
     var starObject = {
         0 : 'images/0.png',
         0.5 : 'images/0_5.png',
