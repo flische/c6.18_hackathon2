@@ -24,7 +24,7 @@ var longitude = -117.83;
 
 */
 var venueSearchResults = [];
-
+var buyTicketsUrl;
 /***************************************************************************************************
  * initializeApp
  * @params {undefined} none
@@ -44,14 +44,16 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $('.details').on('click',  pageTransition2);
-    $(".events-body").on("click", ".details", handleDetailsClick);
+    $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
     $('.google-maps').click(pageTransition4);
     $('#bar').click(gotoMap);
     $('#restaurant').click(gotoMap);
     $('#lodging').click(gotoMap);
+    $('.back-to-map').click(gotoMap);
+    $('#tickets').click(buyTicketsLink);
 }
+
 /*************************************************************************************************
 * handleSearchClick()
 * store zipcode and genre in local variables
@@ -66,7 +68,7 @@ function handleSearchClick() {
     var genre = genreInput.val();
     var city = $('#city').val();
     getVenueData(city, genre);
-    
+
 
 }
 
@@ -95,7 +97,7 @@ function getVenueData(city, genre) {
                 venueSearchResults[venueI] = result._embedded.events[venueI];
             }
             page2DomCreation(venueSearchResults);
-    		pageTransition();
+            pageTransition();
         },
         error: function (err) {
             console.log(err);
@@ -206,7 +208,7 @@ function page2DomCreation(venueSearchResults) {
             var temp = createLightElement(venueSearchResults[resultIndex], resultIndex)
             $('.events-body').append(temp);
         } else {
-        	var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
+            var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
             $('.events-body').append(temp);
         }
     }
@@ -258,17 +260,38 @@ function pageTransition4() {
 function gotoMap() {
     $('.google-maps').removeClass('hidden');
     $('.concert-details').addClass('hidden');
+    $('.yelp').addClass('hidden');
 
 }
 
-function handleDetailsClick(){
-	var detailsIndex = $(this).attr('arrayindex');
-	handlePage3Details(venueSearchResults[detailsIndex]);
-	pageTransition2();
+function handleDetailsClick() {
+    var detailsIndex = $(this).attr('arrayindex');
+    handlePage3Details(venueSearchResults[detailsIndex]);
+    pageTransition2();
 }
 
+//passing in the index into this function
+function handlePage3Details(singleEvent) {
+    //changing the span text to match the details for the event being generated
 
-function handlePage3Details() {
+    //add click handler first
+    buyTicketsUrl = singleEvent.url;
+    console.log(buyTicketsUrl)
+    var artistPicture = singleEvent.images[3].url;
+    $('.pageThreeArtistImg').attr('src', artistPicture);
+    $('.pageThreeNameSpan').text(singleEvent.name);
+    $('.pageThreeVenueAddressSpan').text(singleEvent._embedded.venues[0].address.line1 + ', ' + singleEvent._embedded.venues[0].city.name);
+    $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
+    $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
+    $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+    var longitude1 = singleEvent._embedded.venues[0].location.longitude;
+    var latitutde1 = singleEvent._embedded.venues[0].location.latitude;
+    console.log(latitutde1,longitude1);
+}
+
+function buyTicketsLink(){
+	var win = window.open(buyTicketsUrl, '_blank');
+  	win.focus();
 }
 /*************************************************************************************************
 * searchForBarsNearby
@@ -278,6 +301,7 @@ function handlePage3Details() {
 * create links on the dropped markers near venue to viewYelpInfo with param of business selected
 */
 function searchForBarsNearby() {
+
 }
 
 /*************************************************************************************************
