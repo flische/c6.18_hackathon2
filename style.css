@@ -400,6 +400,7 @@ i {
 
 .food {
     height: 200px;
+    max-width: 30%;
 }
 
 .yelp-link {
@@ -464,6 +465,7 @@ a:hover {
     text-align: center;
     font-size: 7vmin;
 }
+
 .searchBoxError img {
     height: 25vmin;
 }
