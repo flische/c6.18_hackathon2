@@ -488,7 +488,7 @@ function getYelpBusinessDetails(id) {
 * hide all
 */
 function startOver() {
-    $('.event-results .concert-details .google-maps .yelp').addClass('hidden');
+    $('.event-results, .concert-details, .google-maps, .yelp').addClass('hidden');
     $('.home').removeClass('hidden');
 }
 
