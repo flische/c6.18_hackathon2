@@ -97,14 +97,16 @@ function getVenueData(city, genre) {
     var ajaxConfig = {
         url: custUrl,
         success: function (result) {
-            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
-                venueSearchResults[venueI] = result._embedded.events[venueI];
-
-            }
-            $('#city').val('');
-            page2DomCreation(venueSearchResults);
-            transitionPages('page1', 'page2');
-
+            if(result.page.totalElements>0){
+	            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
+	                venueSearchResults[venueI] = result._embedded.events[venueI];
+	            }
+	            $('#city').val('');
+            	page2DomCreation(venueSearchResults);
+            	transitionPages('page1', 'page2');
+	        } else {
+	        	window.alert('No Results found, try a different city!')
+	        }     
         },
         error: function (err) {
             console.log(err);
