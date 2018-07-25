@@ -44,9 +44,9 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $(".events-body").on("click", ".details", handleDetailsClick)
+    $(".events-body").on("click", ".details", handleDetailsClick);
     $('.results').click(function () {
-        transitionPages('page3', 'page2')
+        transitionPages('page3', 'page2');
     });
     $('.back-to-map').click(gotoMap);
 
@@ -97,14 +97,16 @@ function getVenueData(city, genre) {
     var ajaxConfig = {
         url: custUrl,
         success: function (result) {
-            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
-                venueSearchResults[venueI] = result._embedded.events[venueI];
-
-            }
-            $('#city').val('');
-            page2DomCreation(venueSearchResults);
-            transitionPages('page1', 'page2');
-
+            if(result.page.totalElements>0){
+	            for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
+	                venueSearchResults[venueI] = result._embedded.events[venueI];
+	            }
+	            $('#city').val('');
+            	page2DomCreation(venueSearchResults);
+            	transitionPages('page1', 'page2');
+	        } else {
+	        	showErrorModal();
+	        }     
         },
         error: function (err) {
             console.log(err);
@@ -132,7 +134,7 @@ function getEvents(){
 */
 
 function page2DomCreation(venueSearchResults) {
-    $('.events-body').empty() // maybe used to clear page before rendering new elements???? idk
+    $('.events-body').empty(); // maybe used to clear page before rendering new elements???? idk
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
     function createLightElement(eventDetails, index) {
@@ -157,7 +159,7 @@ function page2DomCreation(venueSearchResults) {
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
         var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
-        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
         var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
@@ -196,7 +198,7 @@ function page2DomCreation(venueSearchResults) {
         eachEventDate.append(dateObject);
 
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
@@ -305,10 +307,13 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeDateSpan').text(convertDateFormat(singleEvent.dates.start.localDate));
     $('.pageThreeTimeSpan').text(convertMilitaryTime(singleEvent.dates.start.localTime));
 
-    latitude = singleEvent._embedded.venues[0].location.latitude;
     longitude = singleEvent._embedded.venues[0].location.longitude;
+
+    latitude = singleEvent._embedded.venues[0].location.latitude;
+
     console.log('before map: ', latitude, longitude);
     transitionPages('page2', 'page3');
+
 }
 /**********************************************************
  * callBars
@@ -344,6 +349,7 @@ function callHotels() {
     gotoMap();
 }
 
+
 /**********************************************************
  * buyTicketsLink
  * @params none
@@ -371,7 +377,6 @@ function viewYelpInfo() {
 */
 
 function initializeMap(type) {
-    console.log(longitude, latitude);
 
     //defines location we are targeting on the map
     var location = new google.maps.LatLng(latitude, longitude);
@@ -451,17 +456,25 @@ function createMarker(place) {
             var addressStringArray = place.formatted_address.split(",");
             var address1 = addressStringArray[0];
             var city = addressStringArray[1];
+            $('.yelp-transition').click(function(){
+                goToYelp(name, address1, city);
+            });
 
-            $('.yelp-transition').click(gotoYelp)
 
         });
     });
 }
 
-function gotoYelp(name, address1, city) {
+function goToYelp(name, address1, city) {
+    console.log(name, address1, city);
     getYelpBusinessID(name, address1, city);
-    transitionPages('page4', 'page5');
 }
+
+// function goToYelp(name, address1, city) {
+//     console.log(name, address1, city);
+//     getYelpBusinessID(name, address1, city);
+//     transitionPages('page4', 'page5');
+// }
 
 /*************************************************************
 * getYelpBusinessID function
@@ -474,7 +487,40 @@ function gotoYelp(name, address1, city) {
 function getYelpBusinessID(name, address, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
 
-    var ajaxConfig = {
+    var ajaxConfig = {};
+
+}
+
+function getYelpBusinessID(name, address1, city) {
+     var customURL = "https://yelp.ongandy.com/businesses/matches";
+     if(name) {
+         customURL+= "?name=" + name;
+     }
+     if(address1) {
+         customURL+= "&address1=" + address1;
+     }
+     if(city) {
+         customURL+= "&city=" + city + "&state=CA&country=US";
+     }
+     console.log('here is our custom URL', customURL);
+
+     var ajaxConfig = {
+         "url": customURL,
+         "method": "POST",
+         "dataType": "JSON",
+         "data": {
+             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+         },
+         success: function (response) {
+             var businessID = response.businesses[0].id;
+             console.log(response);
+             getYelpBusinessDetails(businessID);
+         },
+         error: function (err) {
+             console.log(err);
+         }
+     }
+     var ajaxConfig = {
         url: customURL,
         method: "POST",
         dataType: "JSON",
@@ -516,14 +562,29 @@ function getYelpBusinessDetails(id) {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             id: id
         },
-        success: function (response) {
-            console.log("details", response);
-        },
+        success: renderYelpDetails,
         error: function () {
             console.log("error");
         }
     };
     $.ajax(ajaxConfig);
+}
+
+function renderYelpDetails(details) {
+    $('.place-name').text(details.name);
+    $('.star-rating').text(details.rating);
+    // $('.price-rating').text(details.price);
+    var image1 = details.photos[0];
+    $('#yelpImage1').attr('src', image1);
+    var image2 = details.photos[1];
+    $('#yelpImage2').attr('src', image2);
+    var image3 = details.photos[2];
+    $('#yelpImage3').attr('src', image3);
+    // $('.business-phone').text(details.display_phone);
+    // $('.business-hours').text(details.hours[0].is_open_now);
+    $('.business-address').text(details.display_address);
+    $('#yelpURL').attr('href', details.url);
+    transitionPages('page4', 'page5');
 }
 
 /*************************************************************************************************
@@ -537,6 +598,22 @@ function startOver() {
     venueSearchResults = [];
 }
 
+
+window.onclick = function (event) {
+    var modal = document.getElementById("errorModal");
+
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+function showErrorModal() {
+    $('.shadow1').css('display', 'inline-block');
+}
 /*************************************************************************************************
 * note-back button links/clickhandlers have not been described here yet, but should not be hard to implement
 */
+
+
+

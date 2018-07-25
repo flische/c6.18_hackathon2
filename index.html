@@ -47,30 +47,6 @@
                     <p>search results</p>
                 </div>
                 <div class="events-body">
-                    <!-- <div class="light">
-                        <div class="left-event">
-                            <div class="artist">ARTIST:
-                                <span>Taylor Swift</span>
-                            </div>
-                            <div class="venue">VENUE:
-                                <span>Honda Center</span>
-                            </div>
-                            <div class="results-city">CITY: Irvine</div>
-                        </div>
-                        <div class="center-event">
-                            <div class="date">DATE:
-                                <span>May 10, 2019</span>
-                            </div>
-                            <div class="time">TIME:
-                                <span> 7:00PM</span>
-                            </div>
-                        </div>
-                        <div class="right-event">
-                            <button type="button" class="details">DETAILS</button>
-                        </div>
-
-
-                    </div> -->
 
                 </div>
                 <div class="btn-div">
@@ -85,30 +61,29 @@
                 </div>
                 <div class="concert-details-body">
                     <div class="image-body">
-                        <img class="pageThreeArtistImg" src="images/swift.jpg" alt="">
+                        <img class="pageThreeArtistImg" src="" alt="">
                     </div>
                     <div class="venue-info">
                         <div class="artist-name"> ARTIST NAME:
-                            <span class="pageThreeNameSpan">Taylor Swift
+                            <span class="pageThreeNameSpan">
                             </span>
                         </div>
                         <div class="venue-name">VENUE:
-                            <span class="pageThreeVenueNameSpan">Honda Center
+                            <span class="pageThreeVenueNameSpan">
                             </span>
                         </div>
                         <div class="venue-address">VENUE ADDRESS:
-                            <span class="pageThreeVenueAddressSpan">2695 E Katella Ave, Anaheim, CA 92806
+                            <span class="pageThreeVenueAddressSpan">
                             </span>
                         </div>
 
                     </div>
                     <div class="date-time">
                         <div class="date">DATE:
-                            <span class="pageThreeDateSpan">
-                                May 20, 2019</span>
+                            <span class="pageThreeDateSpan"></span>
                         </div>
                         <div class="time">TIME:
-                            <span class="pageThreeTimeSpan">07:00 PM</span>
+                            <span class="pageThreeTimeSpan"></span>
                         </div>
                         <button id="tickets" type="button">
                             <i class="fas fa-ticket-alt"></i>BUY TICKETS</button>
@@ -151,17 +126,17 @@
             <div class="yelp hidden">
                 <div class="yelp-header">YELP INFO</div>
                 <div class="yelp-body">
-                    <div class="place-name">Chinese Palace</div>
+                    <div class="place-name"></div>
                     <div class="star-rating">
                         <img id="stars" src="images/stars.png" alt="">
                     </div>
                     <div class="yelp-images">
-                        <img class="food" src="images/steak.jpg" alt="">
-                        <img class="food" src="images/sushi.jpg" alt="">
-                        <img class="food" src="images/dessert.jpg" alt="">
+                        <img id="yelpImage1" class="food" src="" alt="">
+                        <img id="yelpImage2" class="food" src="" alt="">
+                        <img id="yelpImage3" class="food" src="" alt="">
                     </div>
                     <div class="yelp-link">
-                        <a href="http://www.yelp.com">Click here to check out more information on Yelp</a>
+                        <a id="yelpURL" href="">Click here to check out more information on Yelp</a>
                     </div>
 
                     <div class="back-btns">
@@ -177,6 +152,14 @@
     </div>
     <div class="right"></div>
     </div>
+
+    <div id="errorModal" class="shadow1">
+        <div class="searchBoxError">
+            <p>No concerts found...<img src="images/tumble.gif" alt="tumbleweed"></p>
+            
+        </div>
+    </div>
+
 
 </body>
 
