@@ -44,7 +44,6 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $('.details').on('click', pageTransition2);
     $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
     $('.google-maps').click(pageTransition4);
@@ -53,8 +52,8 @@ function addClickHandlers() {
     $('#lodging').click(gotoMap);
     $('.back-to-map').click(gotoMap);
     $('#tickets').click(buyTicketsLink);
-
 }
+
 /*************************************************************************************************
 * handleSearchClick()
 * store zipcode and genre in local variables
@@ -103,7 +102,7 @@ function getVenueData(city, genre) {
         error: function (err) {
             console.log(err);
         }
-    }
+    };
     $.ajax(ajaxConfig);
 }
 
@@ -399,19 +398,15 @@ function createMarker(place) {
             }
         });
     });
-
-    var name = place.name;
-    var address = place.formatted_address;
 }
 
-
-/*viewYelpInfo function
-*params businessSelected
-*run yelp api, store results and populate data onto page5 template
-*showHidePage function hide page 4 show page 5
-*button on page to run startOver function
+/*************************************************************
+* getYelpBusinessID function
+* @params {string} name, {string} address1, {string} city
+* run Andy's yelp api (using his proxy server to access Yelp API) to GET business id via business match endpoint
+* @calls (on success) the getYelpBusinessDetails function
 */
-function getYelpInfo(name, address1, city) {
+function getYelpBusinessID(name, address1, city) {
      var customURL = "https://yelp.ongandy.com/businesses/matches";
      if(name) {
          customURL+= "?name=" + name;
@@ -432,7 +427,9 @@ function getYelpInfo(name, address1, city) {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
         },
         success: function(response) {
+            var businessID = response.businesses[0].id;
             console.log(response);
+            getYelpBusinessDetails(businessID);
         },
         error: function(err) {
             console.log(err);
@@ -442,8 +439,34 @@ function getYelpInfo(name, address1, city) {
         console.log(response);
     });
 }
-getYelpInfo('The Oyster Bar SKC', '2626 E Katella Ave', 'Anaheim');
 
+/*************************************************************
+ * getYelpBusinessDetails function
+ * @params {string} id - variable businessID from getYelpBusinessID response
+ * run Andy's yelp api (using his proxy server to access the Yelp business details via their '/business/{id}' endpoint
+ * showHidePage function hide page 4 show page 5
+ * button on page to run startOver function
+ */
+
+function getYelpBusinessDetails(id) {
+    var detailsURL =  "https://yelp.ongandy.com/businesses/details";
+    var ajaxConfig = {
+        "url": detailsURL,
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
+            id: id
+        },
+        success: function (response) {
+            console.log("details", response);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    };
+    $.ajax(ajaxConfig);
+}
 
 /*************************************************************************************************
 * startOver function
