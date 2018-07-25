@@ -51,6 +51,10 @@ function addClickHandlers() {
 
     $('#tickets').click(buyTicketsLink);
 
+    $('#bar').click(gotoMap);
+    $('#restaurant').click(gotoMap);
+    $('#lodging').click(gotoMap);
+    $('.back-to-details').click(backToPage2);
     $('#bar').click(callBars);
     $('#restaurant').click(callRestaurant);
     $('#lodging').click(callHotels);
@@ -72,11 +76,11 @@ function handleSearchClick() {
     var genre = genreInput.val();
     var city = $('#city').val();
     getVenueData(city, genre);
-
-
 }
 
-
+function backToPage2() {
+    transitionPages('page4', 'page3');
+}
 
 /*************************************************************************************************
 * getEvents ajax function
@@ -225,19 +229,19 @@ function page2DomCreation(venueSearchResults) {
 * will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
 */
 var pageClasses = {
-	'page1': '.home',
-	'page2': '.event-results',
-	'page3': '.concert-details',
-	'page4': '.google-maps',
-	'page5': '.yelp'
+    'page1': '.home',
+    'page2': '.event-results',
+    'page3': '.concert-details',
+    'page4': '.google-maps',
+    'page5': '.yelp'
 }
 
 function transitionPages(pageToHide, pageToShow) {
-	// var hide = pageClasses[pageToHide];
-	// var show = pageClasses[pageToShow];
-	// console.log(hide, show)
-	$(pageClasses[pageToHide]).addClass('hidden');
-	$(pageClasses[pageToShow]).removeClass('hidden');
+    // var hide = pageClasses[pageToHide];
+    // var show = pageClasses[pageToShow];
+    // console.log(hide, show)
+    $(pageClasses[pageToHide]).addClass('hidden');
+    $(pageClasses[pageToShow]).removeClass('hidden');
 }
 /*************************************************************************************************
 * handlePage3Details
@@ -315,7 +319,6 @@ function callRestaurant() {
 }
 function callHotels() {
     initializeMap('lodging');
-
 }
 
 
@@ -375,6 +378,11 @@ function initializeMap(type) {
         radius: '5000',
         type: [`${type}`]
     };
+
+    var marker = new google.maps.Marker({
+        map: map,
+        position: location
+    });
 
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, callback);
@@ -446,7 +454,8 @@ function createMarker(place) {
 * @calls (on success) the getYelpBusinessDetails function
 */
 
-function getYelpInfo(name, address1, city) {
+
+function getYelpBusinessID(name, address1, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
     if (name) {
         customURL += "?name=" + name;
@@ -491,6 +500,21 @@ function getYelpBusinessID(name, address1, city) {
          error: function(err) {
              console.log(err);
          }
+    var ajaxConfig = {
+        "url": customURL,
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
+        },
+        success: function (response) {
+            var businessID = response.businesses[0].id;
+            console.log(response);
+            getYelpBusinessDetails(businessID);
+        },
+        error: function (err) {
+            console.log(err);
+        }
     };
     $.ajax(ajaxConfig).done(function (response) {
         console.log(response);
@@ -506,7 +530,7 @@ function getYelpBusinessID(name, address1, city) {
  */
 
 function getYelpBusinessDetails(id) {
-    var detailsURL =  "https://yelp.ongandy.com/businesses/details";
+    var detailsURL = "https://yelp.ongandy.com/businesses/details";
     var ajaxConfig = {
         "url": detailsURL,
         "method": "POST",
