@@ -385,10 +385,26 @@ i {
     font-size: 6vmin;
     font-weight: bold;
 }
-
+.business-address,
+.business-hours,
+.business-phone,
 .star-rating,
 .yelp-link {
     text-align: center;
+    margin-top: 5px;
+}
+
+.yelp-link {
+
+}
+
+.price-rating {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.business-hours {
+    color: coral;
 }
 
 #stars {
@@ -411,7 +427,7 @@ i {
 
 a:link {
     color: #4c4d52;
-    text-decoration: none;
+    /*text-decoration: none;*/
 }
 
 /* visited link */

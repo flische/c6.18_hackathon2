@@ -573,9 +573,17 @@ function renderYelpDetails(details) {
     $('#yelpImage2').attr('src', image2);
     var image3 = details.photos[2];
     $('#yelpImage3').attr('src', image3);
-    //$('.business-phone').text(details.display_phone);
-    //$('.business-hours').text(details.hours[0].is_open_now);
-    //$('.business-address').text(details.display_address);
+    $('.business-phone').text('Phone: ' + details.display_phone);
+    $('.business-hours').text(function(){
+        if(details.hours[0].is_open_now){
+            return "Open now";
+        }
+        else {
+            return "Closed now";
+        }
+    });
+    $('.business-address').text('Address: ' + details.location.display_address);
+    console.log(details);
     $('#yelpURL').attr('href', details.url);
     transitionPages('page4', 'page5');
 }
