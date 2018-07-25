@@ -439,3 +439,23 @@ a:hover {
         display: none;
     }
 }
+
+.shadow1 {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.searchBoxError {
+    height: 20%;
+    width: 50%;
+    background-color: white;
+    border: 5px solid white;
+    transform: translate(50%, 50%);
+    text-align: center;
+    font-size: 45px;
+}
