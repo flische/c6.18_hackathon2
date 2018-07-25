@@ -202,6 +202,20 @@ input {
     font-size: 2vmin;
 }
 
+.reset-btn {
+    position: absolute;
+    margin-left: 10px;
+    float: left;
+}
+
+.reset-2 {
+    width: 10vmin;
+    height: 7vmin;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 2vmin;
+}
+
 /* *************************CONCERT DETAILS******************************* */
 
 .concert-details {
@@ -373,6 +387,13 @@ i {
     width: 100%;
 }
 
+.yelp-transition {
+    font-size: 16px;
+    font-weight: bold;
+    color: coral;
+    text-decoration-line: underline;
+}
+
 .yelp-body {
     font-size: 2.5vmin;
     background-color: white;
@@ -385,6 +406,7 @@ i {
     font-size: 6vmin;
     font-weight: bold;
 }
+
 .business-address,
 .business-hours,
 .business-phone,
@@ -394,12 +416,15 @@ i {
     margin-top: 5px;
 }
 
-.yelp-link {
-
+.star-rating {
+    padding: 0;
+    margin: 0;
 }
 
 .price-rating {
     text-align: center;
+    font-size: 30px;
+    font-weight: bold;
     margin-bottom: 10px;
 }
 
@@ -409,7 +434,7 @@ i {
 
 #stars {
     width: 300px;
-    padding: 2%;
+    padding: 0;
 }
 
 .yelp-images {
@@ -427,7 +452,6 @@ i {
 
 a:link {
     color: #4c4d52;
-    /*text-decoration: none;*/
 }
 
 /* visited link */
