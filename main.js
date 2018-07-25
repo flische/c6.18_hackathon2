@@ -153,7 +153,7 @@ function page2DomCreation(venueSearchResults) {
         var centerEventDiv = $('<div>', { 'class': 'center-event' });
 
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
         let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
@@ -190,7 +190,7 @@ function page2DomCreation(venueSearchResults) {
         var centerEventDiv = $('<div>', { 'class': 'center-event' });
 
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
 
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
@@ -240,6 +240,11 @@ function convertMilitaryTime(milTime){
 	timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes; 
 	timeValue += (hours >= 12) ? " P.M." : " A.M.";
 	return timeValue;
+}
+function convertDateFormat(yyddmm){
+	var newDate = yyddmm.split('-');
+	var returnDate = (newDate[1]) + '-' + newDate[2] + '-' + newDate[0];
+	return returnDate;
 }
 
 
@@ -296,8 +301,8 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeNameSpan').text(singleEvent.name);
     $('.pageThreeVenueAddressSpan').text(singleEvent._embedded.venues[0].address.line1 + ', ' + singleEvent._embedded.venues[0].city.name);
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
-    $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
-    $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+    $('.pageThreeDateSpan').text(convertDateFormat(singleEvent.dates.start.localDate));
+    $('.pageThreeTimeSpan').text(convertMilitaryTime(singleEvent.dates.start.localTime));
 
     latitude = singleEvent._embedded.venues[0].location.latitude;
     longitude = singleEvent._embedded.venues[0].location.longitude;
