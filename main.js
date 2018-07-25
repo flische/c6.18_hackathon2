@@ -220,7 +220,20 @@ function page2DomCreation(venueSearchResults) {
 * @params which page to show, which page to hide
 * will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
 */
-function showHidePage() {
+var pageClasses = {
+	'page1': '.home',
+	'page2': '.event-results',
+	'page3': '.concert-details',
+	'page4': '.google-maps',
+	'page5': '.yelp'
+}
+
+function transitionPages(pageToHide, pageToShow) {
+	// var hide = pageClasses[pageToHide];
+	// var show = pageClasses[pageToShow];
+	// console.log(hide, show)
+	$(pageClasses[pageToHide]).addClass('hidden');
+	$(pageClasses[pageToShow]).removeClass('hidden');
 }
 /*************************************************************************************************
 * handlePage3Details
