@@ -31,6 +31,7 @@ var buyTicketsUrl;
  * @returns: {undefined} none
  * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
  */
+
 function initializeApp() {
     addClickHandlers();
 }
@@ -41,6 +42,7 @@ function initializeApp() {
 * @returns  {undefined}
 * using event delegation, adds click handlers to page 1 static elements and future dynamic elements
 */
+
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
@@ -57,9 +59,7 @@ function addClickHandlers() {
     $('#bar').click(callBars);
     $('#restaurant').click(callRestaurant);
     $('#lodging').click(callHotels);
-
 }
-
 
 /*************************************************************************************************
 * handleSearchClick()
@@ -70,13 +70,13 @@ function addClickHandlers() {
 * @calls page2DomCreation function
 * @calls showHidePage function (hide page1, show page2)
 */
+
 function handleSearchClick() {
     var genreInput = $('#genre :selected');
     var genre = genreInput.val();
     var city = $('#city').val();
     getVenueData(city, genre);
 }
-
 
 /*************************************************************************************************
 * getEvents ajax function
@@ -115,7 +115,6 @@ function getVenueData(city, genre) {
     $.ajax(ajaxConfig);
 }
 
-
 /* page2DomCreation function
 *using search results stored in global will create divs with various info onto the page
 *will create a link on each dom element, possible store index number into dom element to be referenced later
@@ -134,9 +133,7 @@ function getEvents(){
 */
 
 function page2DomCreation(venueSearchResults) {
-    $('.events-body').empty(); // maybe used to clear page before rendering new elements???? idk
-    //creates a single element that contains the details for the event and appends them to the a single div
-    //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
+    $('.events-body').empty();
     function createLightElement(eventDetails, index) {
         var eachEventDetailBody = $('<div>', { 'class': 'light' });
 
@@ -211,14 +208,15 @@ function page2DomCreation(venueSearchResults) {
         eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
         return eachEventDetailBody;
     }
+
     //loops through and creates each individual element and appends to the DOM
     for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
         //rebecca wanted to add 2 different classes to style every other line differnetly
         if (resultIndex % 2 === 0) {
-            var temp = createLightElement(venueSearchResults[resultIndex], resultIndex)
+            var temp = createLightElement(venueSearchResults[resultIndex], resultIndex);
             $('.events-body').append(temp);
         } else {
-            var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
+            var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex);
             $('.events-body').append(temp);
         }
     }
@@ -245,31 +243,31 @@ function convertMilitaryTime(milTime) {
     timeValue += (hours >= 12) ? " P.M." : " A.M.";
     return timeValue;
 }
+
 function convertDateFormat(yyddmm) {
     var newDate = yyddmm.split('-');
     var returnDate = (newDate[1]) + '-' + newDate[2] + '-' + newDate[0];
     return returnDate;
 }
 
-
 /*************************************************************************************************
 * showHidePage function
 * @params which page to show, which page to hide
 * will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
 */
+
 var pageClasses = {
     'page1': '.home',
     'page2': '.event-results',
     'page3': '.concert-details',
     'page4': '.google-maps',
     'page5': '.yelp'
-}
+};
 
 function transitionPages(pageToHide, pageToShow) {
     $(pageClasses[pageToHide]).addClass('hidden');
     $(pageClasses[pageToShow]).removeClass('hidden');
 }
-
 
 /************************************************************************************************** 
  * gotoMap
@@ -298,7 +296,6 @@ function handleDetailsClick() {
 function handlePage3Details(singleEvent) {
     //changing the span text to match the details for the event being generated
     buyTicketsUrl = singleEvent.url;
-    console.log(buyTicketsUrl)
     var artistPicture = singleEvent.images[3].url;
     $('.pageThreeArtistImg').attr('src', artistPicture);
     $('.pageThreeNameSpan').text(singleEvent.name);
@@ -308,13 +305,10 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeTimeSpan').text(convertMilitaryTime(singleEvent.dates.start.localTime));
 
     longitude = singleEvent._embedded.venues[0].location.longitude;
-
     latitude = singleEvent._embedded.venues[0].location.latitude;
-
-    console.log('before map: ', latitude, longitude);
     transitionPages('page2', 'page3');
-
 }
+
 /**********************************************************
  * callBars
  * @params none
@@ -349,7 +343,6 @@ function callHotels() {
     gotoMap();
 }
 
-
 /**********************************************************
  * buyTicketsLink
  * @params none
@@ -359,16 +352,6 @@ function callHotels() {
 function buyTicketsLink() {
     var win = window.open(buyTicketsUrl, '_blank');
     win.focus();
-}
-
-/*************************************************************************************************
-* viewYelpInfo function
-* @params businessSelected
-* @calls run yelp api, store results and populate data onto page5 template
-* @calls showHidePage function hide page 4 show page 5
-* @calls button on page to run startOver function
-*/
-function viewYelpInfo() {
 }
 
 /* initializeMap
@@ -391,12 +374,10 @@ function initializeMap(type) {
         radius: '5000',
         type: [`${type}`]
     };
-
     var marker = new google.maps.Marker({
         map: map,
         position: location
     });
-
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, callback);
 }
@@ -445,8 +426,6 @@ function createMarker(place) {
                 contentStr += '<p><a class="yelp-transition">Get YELP details</a></p>';
                 infowindow.setContent(contentStr);
                 infowindow.open(map, marker);
-                console.log('place:', place);
-                console.log('test place:', place.name, place.address_components[0].short_name, place.address_components[1].short_name, place.address_components[3].short_name);
             } else {
                 var contentStr = "<h5>No Result, status=" + status + "</h5>";
                 infowindow.setContent(contentStr);
@@ -459,22 +438,13 @@ function createMarker(place) {
             $('.yelp-transition').click(function () {
                 goToYelp(name, address1, city);
             });
-
-
         });
     });
 }
 
 function goToYelp(name, address1, city) {
-    console.log(name, address1, city);
     getYelpBusinessID(name, address1, city);
 }
-
-// function goToYelp(name, address1, city) {
-//     console.log(name, address1, city);
-//     getYelpBusinessID(name, address1, city);
-//     transitionPages('page4', 'page5');
-// }
 
 /*************************************************************
 * getYelpBusinessID function
@@ -483,11 +453,8 @@ function goToYelp(name, address1, city) {
 * @calls (on success) the getYelpBusinessDetails function
 */
 
-
 function getYelpBusinessID(name, address1, city) {
     var customURL = "https://yelp.ongandy.com/businesses/matches";
-  
-
     var ajaxConfig = {
         url: customURL,
         method: "POST",
@@ -503,7 +470,6 @@ function getYelpBusinessID(name, address1, city) {
         success: function (response) {
             if(response.businesses[0]){
 	            var businessID = response.businesses[0].id;
-	            console.log(response);
 	            getYelpBusinessDetails(businessID);
 	          }  else{
 	          	window.alert('Business listing not found, try again!')
@@ -544,7 +510,6 @@ function getYelpBusinessDetails(id) {
 
 function renderYelpDetails(details) {
     $('.place-name').text(details.name);
-    console.log(details.rating);
     var starObject = {
         0 : 'images/0.png',
         0.5 : 'images/0_5.png',
@@ -562,7 +527,8 @@ function renderYelpDetails(details) {
     function starRatingImageChanger(starObject, rating){
         var temp = starObject[rating];
         $('#stars').attr('src', temp);
-    } ;
+    }
+
     var starRating = details.rating;
     starRatingImageChanger(starObject,starRating);
 
@@ -583,7 +549,6 @@ function renderYelpDetails(details) {
         }
     });
     $('.business-address').text('Address: ' + details.location.display_address);
-    console.log(details);
     $('#yelpURL').attr('href', details.url);
     transitionPages('page4', 'page5');
 }
@@ -599,22 +564,18 @@ function startOver() {
     venueSearchResults = [];
 }
 
-
 window.onclick = function (event) {
     var modal = document.getElementById("errorModal");
 
     if (event.target == modal) {
         modal.style.display = "none";
     }
-}
-
+};
 
 function showErrorModal() {
     $('.shadow1').css('display', 'inline-block');
 }
+
 /*************************************************************************************************
 * note-back button links/clickhandlers have not been described here yet, but should not be hard to implement
 */
-
-
-
