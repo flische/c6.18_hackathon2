@@ -9,8 +9,8 @@ venueSearchResults = [];
 */
 var map;
 var service;
-var latitude = 33.69;
-var longitude = -117.83;
+var latitude;
+var longitude;
 /*initialize app function
 *call addClickHandlers function
 *no params or returns
@@ -47,12 +47,19 @@ function addClickHandlers() {
     $('.details').on('click', pageTransition2);
     $(".events-body").on("click", ".details", handleDetailsClick)
     $('.results').click(pageTransition3);
-    $('.google-maps').click(pageTransition4);
+    // $('.google-maps').click(pageTransition4);
+    $('.back-to-map').click(gotoMap);
+
+    $('#tickets').click(buyTicketsLink);
     $('#bar').click(gotoMap);
     $('#restaurant').click(gotoMap);
     $('#lodging').click(gotoMap);
-    $('.back-to-map').click(gotoMap);
-    $('#tickets').click(buyTicketsLink);
+
+    $('#bar').click(callBars);
+    $('#restaurant').click(callRestaurant);
+    $('#lodging').click(callHotels);
+
+
 
 }
 /*************************************************************************************************
@@ -96,6 +103,7 @@ function getVenueData(city, genre) {
         success: function (result) {
             for (var venueI = 0; venueI < result._embedded.events.length; venueI++) {
                 venueSearchResults[venueI] = result._embedded.events[venueI];
+
             }
             page2DomCreation(venueSearchResults);
             pageTransition();
@@ -283,11 +291,28 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+
+    latitude = singleEvent._embedded.venues[0].location.latitude;
+    longitude = singleEvent._embedded.venues[0].location.longitude;
+    console.log('before map: ', latitude, longitude);
+
+
 }
 
-function buyTicketsLink(){
-	var win = window.open(buyTicketsUrl, '_blank');
-  	win.focus();
+function callBars() {
+    initializeMap('bar');
+}
+
+function callRestaurant() {
+    initializeMap('restaurant');
+}
+function callHotels() {
+    initializeMap('lodging');
+}
+
+function buyTicketsLink() {
+    var win = window.open(buyTicketsUrl, '_blank');
+    win.focus();
 }
 /*************************************************************************************************
 * searchForBarsNearby
@@ -325,7 +350,9 @@ function viewYelpInfo() {
 *takes in parameters from search for restaurants / bars / hotels to change type in var request to match what type of place person is searching for
 */
 
-function initializeMap() {
+function initializeMap(type) {
+    console.log(longitude, latitude);
+
     //defines location we are targeting on the map
     var location = new google.maps.LatLng(latitude, longitude);
     //creates instance of map
@@ -336,8 +363,8 @@ function initializeMap() {
     //request contains the radius around given location and the type of facility we are targeting
     var request = {
         location: location,
-        radius: '500',
-        type: ['restaurant']
+        radius: '5000',
+        type: [`${type}`]
     };
 
     service = new google.maps.places.PlacesService(map);
@@ -367,6 +394,7 @@ function createMarker(place) {
         icon: image,
         position: place.geometry.location
     });
+
     var request = {
         reference: place.reference
     };
@@ -407,29 +435,29 @@ function createMarker(place) {
 *button on page to run startOver function
 */
 function getYelpInfo(name, address1, city) {
-     var customURL = "https://yelp.ongandy.com/businesses/matches";
-     if(name) {
-         customURL+= "?name=" + name;
-     }
-     if(address1) {
-         customURL+= "&address1=" + address1;
-     }
-     if(city) {
-         customURL+= "&city=" + city + "&state=CA&country=US";
-     }
-     console.log('here is our custom URL', customURL);
+    var customURL = "https://yelp.ongandy.com/businesses/matches";
+    if (name) {
+        customURL += "?name=" + name;
+    }
+    if (address1) {
+        customURL += "&address1=" + address1;
+    }
+    if (city) {
+        customURL += "&city=" + city + "&state=CA&country=US";
+    }
+    console.log('here is our custom URL', customURL);
 
-     var ajaxConfig = {
+    var ajaxConfig = {
         "url": customURL,
         "method": "POST",
         "dataType": "JSON",
         "data": {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx"
         },
-        success: function(response) {
+        success: function (response) {
             console.log(response);
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     };
