@@ -155,11 +155,11 @@ function page2DomCreation(venueSearchResults) {
         var centerEventDiv = $('<div>', { 'class': 'center-event' });
 
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
-
+        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
+        var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
@@ -192,11 +192,12 @@ function page2DomCreation(venueSearchResults) {
         var centerEventDiv = $('<div>', { 'class': 'center-event' });
 
         var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        var dateObject = $('<span>').text(eventDetails.dates.start.localDate);
+        var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
         eachEventDate.append(dateObject);
 
         var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        var timeObject = $('<span>').text(eventDetails.dates.start.localTime);
+        let nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
+        var timeObject = $('<span>').text(nonMilTime);
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
@@ -220,6 +221,34 @@ function page2DomCreation(venueSearchResults) {
         }
     }
 }
+
+function convertMilitaryTime(milTime){
+	if(!milTime){
+		return;
+	}
+	var time = milTime; 
+	time = time.split(':'); 
+	var hours = Number(time[0]);
+	var minutes = Number(time[1]);
+	var seconds = Number(time[2]);
+	var timeValue;
+	if (hours > 0 && hours <= 12) {
+	  timeValue= "" + hours;
+	} else if (hours > 12) {
+	  timeValue= "" + (hours - 12);
+	} else if (hours == 0) {
+	  timeValue= "12";
+	}
+	timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes; 
+	timeValue += (hours >= 12) ? " P.M." : " A.M.";
+	return timeValue;
+}
+function convertDateFormat(yyddmm){
+	var newDate = yyddmm.split('-');
+	var returnDate = (newDate[1]) + '-' + newDate[2] + '-' + newDate[0];
+	return returnDate;
+}
+
 
 /*************************************************************************************************
 * showHidePage function
@@ -274,8 +303,8 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeNameSpan').text(singleEvent.name);
     $('.pageThreeVenueAddressSpan').text(singleEvent._embedded.venues[0].address.line1 + ', ' + singleEvent._embedded.venues[0].city.name);
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
-    $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
-    $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+    $('.pageThreeDateSpan').text(convertDateFormat(singleEvent.dates.start.localDate));
+    $('.pageThreeTimeSpan').text(convertMilitaryTime(singleEvent.dates.start.localTime));
 
     latitude = singleEvent._embedded.venues[0].location.latitude;
     longitude = singleEvent._embedded.venues[0].location.longitude;
