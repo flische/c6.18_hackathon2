@@ -429,6 +429,12 @@ function createMarker(place) {
                 infowindow.setContent(contentStr);
                 infowindow.open(map, marker);
             }
+            const name = place.name;
+            const addressStringArray = place.formatted_address.split(",");
+            console.log(addressStringArray);
+            const address1 = addressStringArray[0];
+            const city = addressStringArray[1];
+            getYelpBusinessID(name, address1, city);
         });
     });
 }
@@ -498,7 +504,7 @@ function getYelpBusinessID(name, address1, city) {
  * getYelpBusinessDetails function
  * @params {string} id - variable businessID from getYelpBusinessID response
  * run Andy's yelp api (using his proxy server to access the Yelp business details via their '/business/{id}' endpoint
- * showHidePage function hide page 4 show page 5
+ * @calls showHidePage function hide page 4 show page 5
  * button on page to run startOver function
  */
 
@@ -524,7 +530,6 @@ function getYelpBusinessDetails(id) {
 
 /*************************************************************************************************
 * startOver function
-
 * basically reset button, go back to page one and empty array
 * hide all
 */
