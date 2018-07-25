@@ -485,10 +485,10 @@ function getYelpBusinessDetails(id) {
 * startOver function
 
 * basically reset button, go back to page one and empty array
+* hide all
 */
 function startOver() {
-    $('.event-results').addClass('hidden');
-    $('.concert-details').addClass('hidden');
+    $('.event-results .concert-details .google-maps .yelp').addClass('hidden');
     $('.home').removeClass('hidden');
 }
 
