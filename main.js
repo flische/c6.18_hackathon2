@@ -291,8 +291,6 @@ function handleDetailsClick() {
 //passing in the index into this function
 function handlePage3Details(singleEvent) {
     //changing the span text to match the details for the event being generated
-
-    //add click handler first
     buyTicketsUrl = singleEvent.url;
     console.log(buyTicketsUrl)
     var artistPicture = singleEvent.images[3].url;
@@ -302,6 +300,12 @@ function handlePage3Details(singleEvent) {
     $('.pageThreeVenueNameSpan').text(singleEvent._embedded.venues[0].name);
     $('.pageThreeDateSpan').text(singleEvent.dates.start.localDate);
     $('.pageThreeTimeSpan').text(singleEvent.dates.start.localTime);
+
+    latitude = singleEvent._embedded.venues[0].location.latitude;
+    longitude = singleEvent._embedded.venues[0].location.longitude;
+    console.log('before map: ', latitude, longitude);
+
+
 }
 
 function callBars() {
@@ -313,10 +317,7 @@ function callRestaurant() {
 }
 function callHotels() {
     initializeMap('lodging');
-    var longitude1 = singleEvent._embedded.venues[0].location.longitude;
-    var latitutde1 = singleEvent._embedded.venues[0].location.latitude;
-    console.log(latitutde1,longitude1);
-}
+    }
 
 function buyTicketsLink() {
     var win = window.open(buyTicketsUrl, '_blank');
