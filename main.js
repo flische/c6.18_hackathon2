@@ -44,9 +44,9 @@ function initializeApp() {
 function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
-    $(".events-body").on("click", ".details", handleDetailsClick)
+    $(".events-body").on("click", ".details", handleDetailsClick);
     $('.results').click(function () {
-        transitionPages('page3', 'page2')
+        transitionPages('page3', 'page2');
     });
     $('.back-to-map').click(gotoMap);
 
@@ -132,7 +132,7 @@ function getEvents(){
 */
 
 function page2DomCreation(venueSearchResults) {
-    $('.events-body').empty() // maybe used to clear page before rendering new elements???? idk
+    $('.events-body').empty(); // maybe used to clear page before rendering new elements???? idk
     //creates a single element that contains the details for the event and appends them to the a single div
     //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
     function createLightElement(eventDetails, index) {
@@ -451,16 +451,24 @@ function createMarker(place) {
             var address1 = addressStringArray[0];
             var city = addressStringArray[1];
 
-            $('.yelp-transition').click(gotoYelp)
-                       
+            $('.yelp-transition').click(function(){
+                goToYelp(name, address1, city);
+            });
+
         });
     });
 }
 
-function gotoYelp(name, address1, city) {
+function goToYelp(name, address1, city) {
+    console.log(name, address1, city);
     getYelpBusinessID(name, address1, city);
-    transitionPages('page4', 'page5');
 }
+
+// function goToYelp(name, address1, city) {
+//     console.log(name, address1, city);
+//     getYelpBusinessID(name, address1, city);
+//     transitionPages('page4', 'page5');
+// }
 
 /*************************************************************
 * getYelpBusinessID function
@@ -515,14 +523,29 @@ function getYelpBusinessDetails(id) {
             api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             id: id
         },
-        success: function (response) {
-            console.log("details", response);
-        },
+        success: renderYelpDetails,
         error: function () {
             console.log("error");
         }
     };
     $.ajax(ajaxConfig);
+}
+
+function renderYelpDetails(details) {
+    $('.place-name').text(details.name);
+    $('.star-rating').text(details.rating);
+    // $('.price-rating').text(details.price);
+    var image1 = details.photos[0];
+    $('#yelpImage1').attr('src', image1);
+    var image2 = details.photos[1];
+    $('#yelpImage2').attr('src', image2);
+    var image3 = details.photos[2];
+    $('#yelpImage3').attr('src', image3);
+    // $('.business-phone').text(details.display_phone);
+    // $('.business-hours').text(details.hours[0].is_open_now);
+    $('.business-address').text(details.display_address);
+    $('#yelpURL').attr('href', details.url);
+    transitionPages('page4', 'page5');
 }
 
 /*************************************************************************************************
@@ -539,3 +562,6 @@ function startOver() {
 /*************************************************************************************************
 * note-back button links/clickhandlers have not been described here yet, but should not be hard to implement
 */
+
+
+
