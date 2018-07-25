@@ -458,7 +458,9 @@ function getYelpInfo(name, address1, city) {
     }
     console.log('here is our custom URL', customURL);
 
-    var ajaxConfig = {
+    var ajaxConfig = {};
+
+}
 
 function getYelpBusinessID(name, address1, city) {
      var customURL = "https://yelp.ongandy.com/businesses/matches";
