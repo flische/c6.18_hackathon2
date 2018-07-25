@@ -45,16 +45,15 @@ function addClickHandlers() {
     $('#searchGenre').click(handleSearchClick);
     $('.reset').click(startOver);
     $(".events-body").on("click", ".details", handleDetailsClick)
-    $('.results').click(pageTransition3);
-    // $('.google-maps').click(pageTransition4);
+    $('.results').click(function(){
+    	transitionPages('page3', 'page2')
+    });
     $('.back-to-map').click(gotoMap);
 
     $('#tickets').click(buyTicketsLink);
-
-    $('#bar').click(gotoMap);
-    $('#restaurant').click(gotoMap);
-    $('#lodging').click(gotoMap);
-    $('.back-to-details').click(backToPage2);
+    $('.back-to-details').click(function(){
+    	transitionPages('page4', 'page3');
+    });
     $('#bar').click(callBars);
     $('#restaurant').click(callRestaurant);
     $('#lodging').click(callHotels);
@@ -78,9 +77,6 @@ function handleSearchClick() {
     getVenueData(city, genre);
 }
 
-function backToPage2() {
-    transitionPages('page4', 'page3');
-}
 
 /*************************************************************************************************
 * getEvents ajax function
@@ -107,7 +103,7 @@ function getVenueData(city, genre) {
             }
             $('#city').val('');
             page2DomCreation(venueSearchResults);
-            pageTransition();
+            transitionPages('page1', 'page2');
 
         },
         error: function (err) {
@@ -239,9 +235,6 @@ var pageClasses = {
 }
 
 function transitionPages(pageToHide, pageToShow) {
-    // var hide = pageClasses[pageToHide];
-    // var show = pageClasses[pageToShow];
-    // console.log(hide, show)
     $(pageClasses[pageToHide]).addClass('hidden');
     $(pageClasses[pageToShow]).removeClass('hidden');
 }
@@ -258,28 +251,6 @@ function transitionPages(pageToHide, pageToShow) {
  * hides and shows divs as needed
 */
 
-function pageTransition() {
-    $('.home').addClass('hidden');
-    $('.event-results').removeClass('hidden');
-}
-//transition from page 2 to 3
-function pageTransition2() {
-    $('.event-results').addClass('hidden');
-    $('.concert-details').removeClass('hidden');
-
-}
-//back to search results
-function pageTransition3() {
-    $('.event-results').removeClass('hidden');
-    $('.concert-details').addClass('hidden');
-
-}
-//back to concert details
-function pageTransition4() {
-    $('.google-maps').addClass('hidden');
-    $('.concert-details').removeClass('hidden');
-
-}
 
 function gotoMap() {
     $('.google-maps').removeClass('hidden');
@@ -291,7 +262,6 @@ function gotoMap() {
 function handleDetailsClick() {
     var detailsIndex = $(this).attr('arrayindex');
     handlePage3Details(venueSearchResults[detailsIndex]);
-    pageTransition2();
 }
 
 //passing in the index into this function
@@ -310,19 +280,23 @@ function handlePage3Details(singleEvent) {
     latitude = singleEvent._embedded.venues[0].location.latitude;
     longitude = singleEvent._embedded.venues[0].location.longitude;
     console.log('before map: ', latitude, longitude);
+    transitionPages('page2', 'page3');
 
 
 }
 
 function callBars() {
     initializeMap('bar');
+    gotoMap();
 }
 
 function callRestaurant() {
     initializeMap('restaurant');
+    gotoMap();
 }
 function callHotels() {
     initializeMap('lodging');
+    gotoMap();
 }
 
 function buyTicketsLink() {
@@ -528,6 +502,7 @@ function getYelpBusinessDetails(id) {
 function startOver() {
     $('.event-results, .concert-details, .google-maps, .yelp').addClass('hidden');
     $('.home').removeClass('hidden');
+    venueSearchResults = [];
 }
 
 /*************************************************************************************************
