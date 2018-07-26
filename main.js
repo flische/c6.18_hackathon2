@@ -323,7 +323,12 @@ function initializeMap(type) {
     };
     var marker = new google.maps.Marker({
         map: map,
-        position: location
+        position: location,
+        title: 'Venue',
+    });
+
+    marker.addListener('click', function () {
+        infowindow.open(map, marker);
     });
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(request, callback);
