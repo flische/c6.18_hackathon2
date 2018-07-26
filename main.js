@@ -3,33 +3,31 @@
 */
 $(document).ready(initializeApp);
 
-/*
-area for globals
-venueSearchResults = [];
-*/
-var map;
-var service;
-var latitude;
-var longitude;
-/*initialize app function
-*call addClickHandlers function
-*no params or returns
-
 /**
  * Define all global variables here (below).
  */
 /*****************************
-* venueSearchResults = []; - global array to hold search results
-* @type {Array}
-
 */
 var venueSearchResults = [];
 var buyTicketsUrl;
+var map;
+var service;
+var latitude;
+var longitude;
+var pageClasses = {
+    'page1': '.home',
+    'page2': '.event-results',
+    'page3': '.concert-details',
+    'page4': '.google-maps',
+    'page5': '.yelp'
+};
+
 /***************************************************************************************************
  * initializeApp
  * @params {undefined} none
  * @returns: {undefined} none
- * initializes the application, including adding click handlers and pulling in any data from the server, in later versions
+ * initializes the application
+ * @calls addClickHandlers
  */
 
 function initializeApp() {
@@ -40,7 +38,7 @@ function initializeApp() {
 * addClickHandlers()
 * @params {undefined}
 * @returns  {undefined}
-* using event delegation, adds click handlers to page 1 static elements and future dynamic elements
+* using event delegation, adds click handlers to all elements that need to be clicked
 */
 
 function addClickHandlers() {
@@ -51,7 +49,7 @@ function addClickHandlers() {
     $('.results').click(function () {
         transitionPages('page3', 'page2');
     });
-    $('.back-to-map').click(gotoMap);
+    $('.back-to-map').click(goToMap);
 
     $('#tickets').click(buyTicketsLink);
     $('.back-to-details').click(function () {
@@ -64,12 +62,10 @@ function addClickHandlers() {
 
 /*************************************************************************************************
 * handleSearchClick()
-* store zipcode and genre in local variables
+* store city and genre in local variables
 * @param: {undefined} none
 * @returns: {undefined} none
-* @calls getEvents AJAX function with zip and genre variables as parameters
-* @calls page2DomCreation function
-* @calls showHidePage function (hide page1, show page2)
+* @calls getVenueData AJAX function with city and genre variables as parameters
 */
 
 function handleSearchClick() {
@@ -80,11 +76,12 @@ function handleSearchClick() {
 }
 
 /*************************************************************************************************
-* getEvents ajax function
-* @param: {number} zip code
+* getVenueData ajax function
+* @param: {string} city
 * @param: {string} genre
 * @returns runs ticketmaster ajax call and stores result into global array
-* will need to decide data stored ie what details
+* @calls page2DomCreation function
+* @calls transitionPages function (hide page1, show page2)
 */
 
 function getVenueData(city, genre) {
@@ -116,21 +113,12 @@ function getVenueData(city, genre) {
     $.ajax(ajaxConfig);
 }
 
-/* page2DomCreation function
-*using search results stored in global will create divs with various info onto the page
-*will create a link on each dom element, possible store index number into dom element to be referenced later
-*dom element link will call handlePage3Details function with dom index as param, then call hideShowPage function
-
-function getEvents(){
-}
-
 /*************************************************************************************************
 * page2DomCreation function
 * using search results stored in global array, will create html elements with various info and then append the elements onto the page
 * will create a link on each dom element, possible store index number into dom element to be referenced later
-* dom element link will call handlePage3Details function with dom index as param, then call hideShowPage function
+* dom element link will call handlePage3Details function with dom index as param
 * @param {array} venueSearchResults
-* @calls hideShowPage
 */
 
 function page2DomCreation(venueSearchResults) {
@@ -175,6 +163,11 @@ function page2DomCreation(venueSearchResults) {
     }
 }
 
+/***************************************************************************************************
+ * convertMilitaryTime
+ * @params {string} milTime
+ * @returns {string} timeValue - converted time
+ */
 function convertMilitaryTime(milTime) {
     if (!milTime) {
         return;
@@ -197,6 +190,11 @@ function convertMilitaryTime(milTime) {
     return timeValue;
 }
 
+/***************************************************************************************************
+ * initializeApp
+ * @params {string} yyddmm - date
+ * @returns {string} returnDate - converted date
+ */
 function convertDateFormat(yyddmm) {
     var newDate = yyddmm.split('-');
     var returnDate = (newDate[1]) + '-' + newDate[2] + '-' + newDate[0];
@@ -204,34 +202,30 @@ function convertDateFormat(yyddmm) {
 }
 
 /*************************************************************************************************
-* showHidePage function
-* @params which page to show, which page to hide
-* will have to figure out the specifics for this function once we have skeleton or if we will need different versions of this function at first
+* transitionPages
+* @params {string} pageToHide, {string} pageToShow - which page to show, which page to hide
 */
-
-var pageClasses = {
-    'page1': '.home',
-    'page2': '.event-results',
-    'page3': '.concert-details',
-    'page4': '.google-maps',
-    'page5': '.yelp'
-};
-
 function transitionPages(pageToHide, pageToShow) {
     $(pageClasses[pageToHide]).addClass('hidden');
     $(pageClasses[pageToShow]).removeClass('hidden');
 }
 
-/************************************************************************************************** 
- * gotoMap
- * hides and shows map as needed
+/**************************************************************************************************
+* goToMap - transitions to map from other pages
+* @param: {undefined} none
+* @returns: {undefined} none
 */
-function gotoMap() {
+function goToMap() {
     $('.google-maps').removeClass('hidden');
     $('.concert-details').addClass('hidden');
     $('.yelp').addClass('hidden');
 }
 
+/**************************************************************************************************
+ * handleDetailsClick - handles page 3 detail clicks, adds arrayIndex to the item in the array of venueSearchResults
+ * @param: {undefined} none
+ * @returns: {undefined} none
+ */
 function handleDetailsClick() {
     var detailsIndex = $(this).attr('arrayindex');
     handlePage3Details(venueSearchResults[detailsIndex]);
@@ -239,8 +233,8 @@ function handleDetailsClick() {
 
 /*************************************************************************************************
 * handlePage3Details
-* @params index of page 2 dom element clicked to reference global array
-* this function will pull details from global arrya and fill them onto page 3 template, artist name, venue, dates, image etc
+* @params {string} singleEvent - index of page 2 dom element clicked to reference global array
+* this function will pull details from global array and fill them onto page 3 template, artist name, venue, dates, image etc
 * variables for lat and long are stored to be passed later
 * this page will have 2 links for searchForBarsNearby and searchForRestuarantsNearby function with lat and long as params
 */
@@ -265,34 +259,34 @@ function handlePage3Details(singleEvent) {
  * callBars
  * @params none
  * calls initializeMap and passes in parameter we want to search for
- * calls gotoMap
+ * calls goToMap
  */
 function callBars() {
     initializeMap('bar');
-    gotoMap();
+    goToMap();
 }
 
 /**********************************************************
  * callRestaurant
  * @params none
  * calls initializeMap and passes in parameter we want to search for
- * calls gotoMap
+ * calls goToMap
  */
 
 function callRestaurant() {
     initializeMap('restaurant');
-    gotoMap();
+    goToMap();
 }
 
 /**********************************************************
  * callHotels
  * @params none
  * calls initializeMap and passes in parameter we want to search for
- * calls gotoMap
+ * calls goToMap
  */
 function callHotels() {
     initializeMap('lodging');
-    gotoMap();
+    goToMap();
 }
 
 /**********************************************************
@@ -306,9 +300,10 @@ function buyTicketsLink() {
     win.focus();
 }
 
-/* initializeMap
-*params lat and long
-*takes in parameters from search for restaurants / bars / hotels to change type in var request to match what type of place person is searching for
+/***************************************************************************************************
+* initializeMap
+* @param {string} type
+* takes in parameters from search for restaurants / bars / hotels to change type in var request to match what type of place person is searching for
 */
 
 function initializeMap(type) {
@@ -333,6 +328,12 @@ function initializeMap(type) {
     service.nearbySearch(request, callback);
 }
 
+/***************************************************************************************************
+ * callback - creates a student objects based on input fields in the form and adds the object to global student array
+ * @param {string} results, {string} status
+ * @return undefined
+ * @calls createMarker
+ */
 function callback(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         for (var i = 0; i < results.length; i++) {
@@ -342,6 +343,12 @@ function callback(results, status) {
     }
 }
 
+/***************************************************************************************************
+ * createMarker - creates a student objects based on input fields in the form and adds the object to global student array
+ * @param {string} place
+ * @return undefined
+ * @calls goToYelp
+ */
 function createMarker(place) {
     var placeLoc = place.geometry.location;
     if (place.icon) {
@@ -506,8 +513,9 @@ function renderYelpDetails(details) {
 
 /*************************************************************************************************
 * startOver function
+* @param: {undefined} none
+* @returns: {undefined} none
 * basically reset button, go back to page one and empty array
-* hide all
 */
 function startOver() {
     $('.event-results, .concert-details, .google-maps, .yelp').addClass('hidden');
@@ -515,6 +523,10 @@ function startOver() {
     venueSearchResults = [];
 }
 
+/*************************************************************************************************
+ * window.onclick function - when error modal pops up
+ * basically reset button, go back to page one and empty array
+ */
 window.onclick = function (event) {
     var modal = document.getElementById("errorModal");
 
@@ -523,10 +535,9 @@ window.onclick = function (event) {
     }
 };
 
+/*************************************************************************************************
+ * showErrorModal - shows modal that displays error if no concerts in said city
+ */
 function showErrorModal() {
     $('.shadow1').css('display', 'inline-block');
 }
-
-/*************************************************************************************************
-* note-back button links/clickhandlers have not been described here yet, but should not be hard to implement
-*/
