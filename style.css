@@ -530,12 +530,6 @@ a:hover {
     }
 }
 
-@media only screen and (max-width: 609px) {
-    .image-body {
-        display: none;
-    }
-}
-
 .shadow1 {
     position: fixed;
     left: 0px;
