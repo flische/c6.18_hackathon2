@@ -14,6 +14,7 @@ var map;
 var service;
 var latitude;
 var longitude;
+var lastWindow;
 var pageClasses = {
     'page1': '.home',
     'page2': '.event-results',
@@ -122,7 +123,7 @@ function getVenueData(city, genre) {
 */
 
 function page2DomCreation(venueSearchResults) {
-    $('.events-body').empty(); 
+    $('.events-body').empty();
     for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
         if (resultIndex % 2 === 0) {
             var eachEventDetailBody = $('<div>', { 'class': 'light' });
@@ -372,18 +373,24 @@ function createMarker(place) {
         contentStr: ""
     });
 
+
+
     google.maps.event.addListener(marker, 'click', function () {
 
         service.getDetails(request, function (place, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
-                var contentStr = '<h5>' + place.name + '</h5><p>' + place.formatted_address;
+                var contentStr = '<h3>' + place.name + '</h3><p>' + place.formatted_address;
                 if (!!place.formatted_phone_number) contentStr += '<br>' + place.formatted_phone_number;
                 if (!!place.website) contentStr += '<br><a target="_blank" href="' + place.website +
                     '">' + place.website + '</a>';
                 contentStr += '<br>' + '</p>';
                 contentStr += '<p><a class="yelp-transition">Get YELP details</a></p>';
                 infowindow.setContent(contentStr);
+                if (lastWindow) {
+                    lastWindow.close();
+                }
                 infowindow.open(map, marker);
+                lastWindow = infowindow;
             } else {
                 var contentStr = "<h5>No Result, status=" + status + "</h5>";
                 infowindow.setContent(contentStr);
@@ -426,12 +433,12 @@ function getYelpBusinessID(name, address1, city) {
             country: "US"
         },
         success: function (response) {
-            if(response.businesses[0]){
-	            var businessID = response.businesses[0].id;
-	            getYelpBusinessDetails(businessID);
-	          }  else{
-	          	window.alert('Business listing not found, try again!')
-	          }
+            if (response.businesses[0]) {
+                var businessID = response.businesses[0].id;
+                getYelpBusinessDetails(businessID);
+            } else {
+                window.alert('Business listing not found, try again!')
+            }
         },
         error: function () {
             console.log('error');
@@ -486,7 +493,7 @@ function renderYelpDetails(details) {
         var temp = starObject[rating];
         $('#stars').attr('src', temp);
     }
-  
+
     var starRating = details.rating;
     starRatingImageChanger(starObject, starRating);
 
