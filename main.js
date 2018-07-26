@@ -135,93 +135,43 @@ function getEvents(){
 */
 
 function page2DomCreation(venueSearchResults) {
-    $('.events-body').empty(); // maybe used to clear page before rendering new elements???? idk
-    //creates a single element that contains the details for the event and appends them to the a single div
-    //takes in a parameter called eventDetails thats a single object in the array venueSearchResults
-    function createLightElement(eventDetails, index) {
-        var eachEventDetailBody = $('<div>', { 'class': 'light' });
-
-        var leftEventDiv = $('<div>', { 'class': 'left-event' });
-
-        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
-        var artistObject = $('<span>').text(eventDetails.name);
-        eachArtistName.append(artistObject);
-
-        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
-        var venueObject = $('<span>').text(eventDetails._embedded.venues[0].name);
-        eachVenueName.append(venueObject);
-
-        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
-        var cityObject = $('<span>').text(eventDetails._embedded.venues[0].city.name);
-        eachVenueCity.append(cityObject);
-
-        var centerEventDiv = $('<div>', { 'class': 'center-event' });
-
-        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
-        eachEventDate.append(dateObject);
-        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
-        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        var timeObject = $('<span>').text(nonMilTime);
-        eachEventTime.append(timeObject);
-
-        var rightEventDiv = $('<div>', { 'class': 'right-event' });
-        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': index, text: 'DETAILS' });
-
-        rightEventDiv.append(buttonObject);
-        leftEventDiv.append(eachArtistName, eachVenueName);
-        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
-        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
-        return eachEventDetailBody;
-    }
-
-    function createDarkElement(eventDetails, index) {
-        var eachEventDetailBody = $('<div>', { 'class': 'dark' });
-
-        var leftEventDiv = $('<div>', { 'class': 'left-event' });
-
-        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
-        var artistObject = $('<span>').text(eventDetails.name);
-        eachArtistName.append(artistObject);
-
-        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
-        var venueObject = $('<span>').text(eventDetails._embedded.venues[0].name);
-        eachVenueName.append(venueObject);
-
-        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
-        var cityObject = $('<span>').text(eventDetails._embedded.venues[0].city.name);
-        eachVenueCity.append(cityObject);
-
-        var centerEventDiv = $('<div>', { 'class': 'center-event' });
-
-        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
-        var dateObject = $('<span>').text(convertDateFormat(eventDetails.dates.start.localDate));
-        eachEventDate.append(dateObject);
-
-        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
-        var nonMilTime = convertMilitaryTime(eventDetails.dates.start.localTime);
-        var timeObject = $('<span>').text(nonMilTime);
-        eachEventTime.append(timeObject);
-
-        var rightEventDiv = $('<div>', { 'class': 'right-event' });
-        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': index, text: 'DETAILS' });
-
-        rightEventDiv.append(buttonObject);
-        leftEventDiv.append(eachArtistName, eachVenueName);
-        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
-        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
-        return eachEventDetailBody;
-    }
-    //loops through and creates each individual element and appends to the DOM
+    $('.events-body').empty(); 
     for (var resultIndex = 0; resultIndex < venueSearchResults.length; resultIndex++) {
-        //rebecca wanted to add 2 different classes to style every other line differnetly
         if (resultIndex % 2 === 0) {
-            var temp = createLightElement(venueSearchResults[resultIndex], resultIndex)
-            $('.events-body').append(temp);
+            var eachEventDetailBody = $('<div>', { 'class': 'light' });
         } else {
-            var temp = createDarkElement(venueSearchResults[resultIndex], resultIndex)
-            $('.events-body').append(temp);
+            var eachEventDetailBody = $('<div>', { 'class': 'dark' });
         }
+        var leftEventDiv = $('<div>', { 'class': 'left-event' });
+        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
+        var artistObject = $('<span>').text(venueSearchResults[resultIndex].name);
+        eachArtistName.append(artistObject);
+
+        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
+        var venueObject = $('<span>').text(venueSearchResults[resultIndex]._embedded.venues[0].name);
+        eachVenueName.append(venueObject);
+
+        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
+        var cityObject = $('<span>').text(venueSearchResults[resultIndex]._embedded.venues[0].city.name);
+        eachVenueCity.append(cityObject);
+
+        var centerEventDiv = $('<div>', { 'class': 'center-event' });
+        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
+        var dateObject = $('<span>').text(convertDateFormat(venueSearchResults[resultIndex].dates.start.localDate));
+        eachEventDate.append(dateObject);
+
+        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
+        var timeObject = $('<span>').text(convertMilitaryTime(venueSearchResults[resultIndex].dates.start.localTime));
+        eachEventTime.append(timeObject);
+
+        var rightEventDiv = $('<div>', { 'class': 'right-event' });
+        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': resultIndex, text: 'DETAILS' });
+
+        rightEventDiv.append(buttonObject);
+        leftEventDiv.append(eachArtistName, eachVenueName);
+        centerEventDiv.append(eachEventDate, eachEventTime, eachVenueCity);
+        eachEventDetailBody.append(leftEventDiv, centerEventDiv, rightEventDiv);
+        $('.events-body').append(eachEventDetailBody);
     }
 }
 
