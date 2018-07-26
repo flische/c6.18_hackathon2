@@ -478,7 +478,21 @@ a:hover {
         font-size: 3vmin;
     }
     .back-btns {
-        text-align: center
+        margin-top: 5px;
+        text-align: center;
+    }
+    .left-btn {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+    .right-btn {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+    .reset {
+        width: 40vmin;
     }
 }
 
