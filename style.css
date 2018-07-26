@@ -279,6 +279,7 @@ span {
     border-radius: 3px;
     background-color: white;
     font-size: 2vmin;
+    box-shadow: 1px 1px #4c4d52;
 }
 
 .search-nearby {
@@ -476,6 +477,9 @@ a:hover {
         text-align: center;
         width: 100%;
     }
+    #tickets {
+        margin-bottom: 1%;
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -527,6 +531,10 @@ a:hover {
     .food {
         max-height: 125px;
         max-width: 28%;
+    }
+    .venue-info,
+    .date-time {
+        font-size: 4vmin;
     }
 }
 
