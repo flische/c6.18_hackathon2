@@ -413,6 +413,7 @@ function createMarker(place) {
 }
 
 function goToYelp(name, address1, city) {
+    $('#loader').removeClass('hidden');
     getYelpBusinessID(name, address1, city);
 }
 
@@ -442,6 +443,7 @@ function getYelpBusinessID(name, address1, city) {
                 var businessID = response.businesses[0].id;
                 getYelpBusinessDetails(businessID);
             } else {
+                $('#loader').addClass('hidden');
                 window.alert('Business listing not found, try again!')
             }
         },
@@ -479,6 +481,7 @@ function getYelpBusinessDetails(id) {
 }
 
 function renderYelpDetails(details) {
+    $('#loader').addClass('hidden');
     $('.place-name').text(details.name);
     var starObject = {
         0: 'images/0.png',
