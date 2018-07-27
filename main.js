@@ -86,7 +86,8 @@ function handleSearchClick() {
 */
 
 function getVenueData(city, genre) {
-    var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22KIbXszvF728H6e2';
+    var custUrl = 'https://app.ticketmaster.com/discovery/v2/events.jsonp?apikey=hNel2sQARoJR6Ac22K' +
+        'IbXszvF728H6e2';
     if (city) {
         custUrl += '&city=' + city;
     }
@@ -131,29 +132,49 @@ function page2DomCreation(venueSearchResults) {
             var eachEventDetailBody = $('<div>', { 'class': 'dark' });
         }
         var leftEventDiv = $('<div>', { 'class': 'left-event' });
-        var eachArtistName = $('<div>', { 'class': 'artist', text: 'ARTIST: ' });
+        var eachArtistName = $('<div>', {
+            'class': 'artist',
+            text: 'ARTIST: '
+        });
         var artistObject = $('<span>').text(venueSearchResults[resultIndex].name);
         eachArtistName.append(artistObject);
 
-        var eachVenueName = $('<div>', { 'class': 'venue', text: 'VENUE: ' });
+        var eachVenueName = $('<div>', {
+            'class': 'venue',
+            text: 'VENUE: '
+        });
         var venueObject = $('<span>').text(venueSearchResults[resultIndex]._embedded.venues[0].name);
         eachVenueName.append(venueObject);
 
-        var eachVenueCity = $('<div>', { 'class': 'results-city', text: 'CITY: ' });
+        var eachVenueCity = $('<div>', {
+            'class': 'results-city',
+            text: 'CITY: '
+        });
         var cityObject = $('<span>').text(venueSearchResults[resultIndex]._embedded.venues[0].city.name);
         eachVenueCity.append(cityObject);
 
         var centerEventDiv = $('<div>', { 'class': 'center-event' });
-        var eachEventDate = $('<div>', { 'class': 'date', text: 'DATE: ' });
+        var eachEventDate = $('<div>', {
+            'class': 'date',
+            text: 'DATE: '
+        });
         var dateObject = $('<span>').text(convertDateFormat(venueSearchResults[resultIndex].dates.start.localDate));
         eachEventDate.append(dateObject);
 
-        var eachEventTime = $('<div>', { 'class': 'time', text: 'TIME: ' });
+        var eachEventTime = $('<div>', {
+            'class': 'time',
+            text: 'TIME: '
+        });
         var timeObject = $('<span>').text(convertMilitaryTime(venueSearchResults[resultIndex].dates.start.localTime));
         eachEventTime.append(timeObject);
 
         var rightEventDiv = $('<div>', { 'class': 'right-event' });
-        var buttonObject = $('<button>', { 'type': 'button', 'class': 'details', 'arrayindex': resultIndex, text: 'DETAILS' });
+        var buttonObject = $('<button>', {
+            'type': 'button',
+            'class': 'details',
+            'arrayindex': resultIndex,
+            text: 'DETAILS'
+        });
 
         rightEventDiv.append(buttonObject);
         leftEventDiv.append(eachArtistName, eachVenueName);
@@ -186,8 +207,12 @@ function convertMilitaryTime(milTime) {
     } else if (hours == 0) {
         timeValue = "12";
     }
-    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;
-    timeValue += (hours >= 12) ? " P.M." : " A.M.";
+    timeValue += (minutes < 10)
+        ? ":0" + minutes
+        : ":" + minutes;
+    timeValue += (hours >= 12)
+        ? " P.M."
+        : " A.M.";
     return timeValue;
 }
 
@@ -315,17 +340,14 @@ function initializeMap(type) {
         center: location,
         zoom: 13
     });
-    //request contains the radius around given location and the type of facility we are targeting
+    // request contains the radius around given location and the type of facility we
+    // are targeting
     var request = {
         location: location,
         radius: '5000',
         type: [`${type}`]
     };
-    var marker = new google.maps.Marker({
-        map: map,
-        position: location,
-        title: 'Venue',
-    });
+    var marker = new google.maps.Marker({ map: map, position: location, title: 'Venue' });
 
     marker.addListener('click', function () {
         infowindow.open(map, marker);
@@ -358,37 +380,27 @@ function callback(results, status) {
 function createMarker(place) {
     var placeLoc = place.geometry.location;
     if (place.icon) {
-        var image = new google.maps.MarkerImage(
-            place.icon, new google.maps.Size(71, 71),
-            new google.maps.Point(0, 0), new google.maps.Point(17, 34),
-            new google.maps.Size(25, 25));
-    } else var image = null;
+        var image = new google.maps.MarkerImage(place.icon, new google.maps.Size(71, 71), new google.maps.Point(0, 0), new google.maps.Point(17, 34), new google.maps.Size(25, 25));
+    } else
+        var image = null;
 
-    var marker = new google.maps.Marker({
-        map: map,
-        icon: image,
-        position: placeLoc
-    });
+    var marker = new google.maps.Marker({ map: map, icon: image, position: placeLoc });
 
     var request = {
         reference: place.reference
     };
 
-    var infowindow = new google.maps.InfoWindow({
-        contentStr: ""
-    });
-
-
+    var infowindow = new google.maps.InfoWindow({ contentStr: "" });
 
     google.maps.event.addListener(marker, 'click', function () {
-
         service.getDetails(request, function (place, status) {
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 var contentStr = '<h3>' + place.name + '</h3><p>' + place.formatted_address;
-                if (!!place.formatted_phone_number) contentStr += '<br>' + place.formatted_phone_number;
-                if (!!place.website) contentStr += '<br><a target="_blank" href="' + place.website +
-                    '">' + place.website + '</a>';
-                contentStr += '<br>' + '</p>';
+                if (!!place.formatted_phone_number)
+                    contentStr += '<br>' + place.formatted_phone_number;
+                if (!!place.website)
+                    contentStr += '<br><a target="_blank" href="' + place.website + '">' + place.website + '</a>';
+                contentStr += '<br></p>';
                 contentStr += '<p><a class="yelp-transition">Get YELP details</a></p>';
                 infowindow.setContent(contentStr);
                 if (lastWindow) {
@@ -402,7 +414,9 @@ function createMarker(place) {
                 infowindow.open(map, marker);
             }
             var name = place.name;
-            var addressStringArray = place.formatted_address.split(",");
+            var addressStringArray = place
+                .formatted_address
+                .split(",");
             var address1 = addressStringArray[0];
             var city = addressStringArray[1];
             $('.yelp-transition').click(function () {
@@ -413,6 +427,7 @@ function createMarker(place) {
 }
 
 function goToYelp(name, address1, city) {
+    $('#loader').removeClass('hidden');
     getYelpBusinessID(name, address1, city);
 }
 
@@ -430,7 +445,8 @@ function getYelpBusinessID(name, address1, city) {
         method: "POST",
         dataType: "JSON",
         data: {
-            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUX" +
+                "XzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             name: name,
             address1: address1,
             city: city,
@@ -442,6 +458,7 @@ function getYelpBusinessID(name, address1, city) {
                 var businessID = response.businesses[0].id;
                 getYelpBusinessDetails(businessID);
             } else {
+                $('#loader').addClass('hidden');
                 window.alert('Business listing not found, try again!')
             }
         },
@@ -467,7 +484,8 @@ function getYelpBusinessDetails(id) {
         method: "POST",
         dataType: "JSON",
         data: {
-            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUXXzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
+            api_key: "JXCOALn0Fdm8EKib4ucfwd_mPjsMzQJ-Zbg8614R3WGF0-805GUkh_jEfxTxkg5MTqzVJVselxNsRYUX" +
+                "XzcLYvd5AGqIc30kmwpDez7TNG-hKZWtRrtA_KDv4aJWW3Yx",
             id: id
         },
         success: renderYelpDetails,
@@ -479,6 +497,7 @@ function getYelpBusinessDetails(id) {
 }
 
 function renderYelpDetails(details) {
+    $('#loader').addClass('hidden');
     $('.place-name').text(details.name);
     var starObject = {
         0: 'images/0.png',
@@ -491,7 +510,7 @@ function renderYelpDetails(details) {
         3.5: 'images/3_5.png',
         4: 'images/4.png',
         4.5: 'images/4_5.png',
-        5: 'images/5.png',
+        5: 'images/5.png'
     };
 
     function starRatingImageChanger(starObject, rating) {
@@ -501,7 +520,6 @@ function renderYelpDetails(details) {
 
     var starRating = details.rating;
     starRatingImageChanger(starObject, starRating);
-
     $('.price-rating').text(details.price);
     var image1 = details.photos[0];
     $('#yelpImage1').attr('src', image1);
@@ -513,8 +531,7 @@ function renderYelpDetails(details) {
     $('.business-hours').text(function () {
         if (details.hours[0].is_open_now) {
             return "Open now";
-        }
-        else {
+        } else {
             return "Closed now";
         }
     });
